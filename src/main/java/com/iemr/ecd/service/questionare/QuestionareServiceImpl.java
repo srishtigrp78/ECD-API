@@ -1,0 +1,367 @@
+package com.iemr.ecd.service.questionare;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.gson.Gson;
+import com.iemr.ecd.dao.CallConfiguration;
+import com.iemr.ecd.dao.Questionnaire;
+import com.iemr.ecd.dao.QuestionnaireSections;
+import com.iemr.ecd.dao.QuestionnaireValues;
+import com.iemr.ecd.dao.SectionQuestionnaireMapping;
+import com.iemr.ecd.dao.V_GetSectionQuestionMapping;
+import com.iemr.ecd.dao.V_GetSectionQuestionMappingAssociates;
+import com.iemr.ecd.dto.RequestSectionQuestionnaireMappingDTO;
+import com.iemr.ecd.dto.ResponseSectionQuestionnaireMappingDTO;
+import com.iemr.ecd.repo.call_conf_allocation.CallConfigurationRepo;
+import com.iemr.ecd.repo.call_conf_allocation.EcdQuestionnaireRepo;
+import com.iemr.ecd.repo.call_conf_allocation.QuestionnaireSectionRepo;
+import com.iemr.ecd.repo.call_conf_allocation.QuestionnaireValuesRepo;
+import com.iemr.ecd.repository.ecd.SectionQuestionnaireMappingRepo;
+import com.iemr.ecd.repository.ecd.V_GetSectionQuestionMappingAssociatesRepo;
+import com.iemr.ecd.repository.ecd.V_GetSectionQuestionMappingRepo;
+import com.iemr.ecd.utils.advice.exception_handler.ECDException;
+import com.iemr.ecd.utils.advice.exception_handler.InvalidRequestException;
+
+import io.micrometer.observation.ObservationRegistry;
+import jakarta.transaction.Transactional;
+
+@Service
+public class QuestionareServiceImpl {
+	@Autowired
+	private ObservationRegistry registry;
+
+	@Autowired
+	private EcdQuestionnaireRepo ecdQuestionnaireRepo;
+	@Autowired
+	private QuestionnaireValuesRepo questionnaireValuesRepo;
+	@Autowired
+	private QuestionnaireSectionRepo questionnaireSectionRepo;
+	@Autowired
+	private SectionQuestionnaireMappingRepo sectionQuestionnaireMappingRepo;
+	@Autowired
+	private V_GetSectionQuestionMappingRepo v_GetSectionQuestionMappingRepo;
+	@Autowired
+	private V_GetSectionQuestionMappingAssociatesRepo v_GetSectionQuestionMappingAssociatesRepo;
+
+	@Transactional(rollbackOn = Exception.class)
+	public String createQuestionares(List<Questionnaire> questionares) {
+
+		try {
+			QuestionnaireValues questionnaireValues;
+			// Set<QuestionnaireValues> optionsSet = null;
+
+			for (Questionnaire questionare : questionares) {
+
+				Questionnaire resultSet = ecdQuestionnaireRepo.save(questionare);
+
+				if (questionare.getQuestionnaireValues() != null && questionare.getQuestionnaireValues().size() > 0) {
+					for (QuestionnaireValues options : questionare.getQuestionnaireValues()) {
+						options.setQuestionId(resultSet.getQuestionnaireId());
+					}
+					questionnaireValuesRepo.saveAll(questionare.getQuestionnaireValues());
+				}
+
+			}
+
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("response", "created successfully");
+			return new Gson().toJson(responseMap);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+	@Transactional(rollbackOn = Exception.class)
+	public String updateQuestionares(Questionnaire questionare) {
+		try {
+			if (questionare != null) {
+				ecdQuestionnaireRepo.save(questionare);
+
+				if (questionare.getQuestionnaireValues() != null && questionare.getQuestionnaireValues().size() > 0)
+					questionnaireValuesRepo.saveAll(questionare.getQuestionnaireValues());
+
+			} else
+				throw new InvalidRequestException("Invalid/NULL request", "please pass correct questionare object");
+
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("response", "modified successfully");
+			return new Gson().toJson(responseMap);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+	@Transactional(rollbackOn = Exception.class)
+	public String createSections(List<QuestionnaireSections> questionareSections) {
+		try {
+			if (questionareSections != null && questionareSections.size() > 0)
+				questionnaireSectionRepo.saveAll(questionareSections);
+			else
+				throw new InvalidRequestException("NULL/Empty request", "please pass valid section list");
+
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("response", "created successfully");
+			return new Gson().toJson(responseMap);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+	public List<QuestionnaireSections> getSectionsByProvider(int psmId) {
+		try {
+			if (psmId > 0)
+				return questionnaireSectionRepo.findByPsmId(psmId);
+			else
+				throw new InvalidRequestException("psmId :" + psmId, "Invalid request parameter");
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+	@Transactional(rollbackOn = Exception.class)
+	public String updateSections(QuestionnaireSections questionareSection) {
+		try {
+			if (questionareSection != null && questionareSection.getSectionId() != null)
+				questionnaireSectionRepo.save(questionareSection);
+			else
+				throw new InvalidRequestException("NULL/Empty request", "please pass valid section object with Id");
+
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("response", "updated successfully");
+			return new Gson().toJson(responseMap);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+	@Transactional(rollbackOn = Exception.class)
+	public String mapQuestionnairesAndSection(
+			RequestSectionQuestionnaireMappingDTO requestSectionQuestionnaireMappingDTO) {
+		try {
+			if (requestSectionQuestionnaireMappingDTO != null
+					&& requestSectionQuestionnaireMappingDTO.getSectionId() > 0
+					&& requestSectionQuestionnaireMappingDTO.getQuestionIds() != null
+					&& requestSectionQuestionnaireMappingDTO.getQuestionIds().size() > 0) {
+
+				SectionQuestionnaireMapping sectionQuestionnaireMapping;
+				List<SectionQuestionnaireMapping> sectionQuestionnaireMappingList = new ArrayList<>();
+				for (Questionnaire questionare : requestSectionQuestionnaireMappingDTO.getQuestionIds()) {
+					sectionQuestionnaireMapping = new SectionQuestionnaireMapping();
+
+					sectionQuestionnaireMapping.setSectionId(requestSectionQuestionnaireMappingDTO.getSectionId());
+					sectionQuestionnaireMapping.setCreatedBy(requestSectionQuestionnaireMappingDTO.getCreatedBy());
+					sectionQuestionnaireMapping.setPsmId(requestSectionQuestionnaireMappingDTO.getPsmId());
+					sectionQuestionnaireMapping.setQuestionId(questionare.getQuestionnaireId());
+					sectionQuestionnaireMapping.setRank(questionare.getRank());
+
+					sectionQuestionnaireMappingList.add(sectionQuestionnaireMapping);
+				}
+
+				sectionQuestionnaireMappingRepo.saveAll(sectionQuestionnaireMappingList);
+
+			} else
+				throw new InvalidRequestException("Invalid request", "please pass valid section Id");
+
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("response", "mapping done successfully");
+			return new Gson().toJson(responseMap);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+	public List<Questionnaire> getQuestionaresByProvider(int psmId) {
+		try {
+
+			List<Questionnaire> questionareList = ecdQuestionnaireRepo.findByPsmId(psmId);
+
+			if (questionareList != null && questionareList.size() > 0) {
+
+				for (Questionnaire questionnaire : questionareList) {
+
+					if (questionnaire != null && questionnaire.getAnswerType() != null
+							&& (questionnaire.getAnswerType().equalsIgnoreCase("Radio")
+									|| questionnaire.getAnswerType().equalsIgnoreCase("Dropdown"))) {
+						List<QuestionnaireValues> optionList = questionnaireValuesRepo
+								.findByQuestionIdAndDeleted(questionnaire.getQuestionnaireId(), false);
+
+						if (optionList != null && optionList.size() > 0) {
+							String[] questionArr = new String[optionList.size()];
+							int i = 0;
+
+							for (QuestionnaireValues option : optionList) {
+								questionArr[i] = option.getOptions();
+								i++;
+							}
+							questionnaire.setOptions(questionArr);
+							questionnaire.setQuestionnaireValues(optionList);
+						}
+					}
+				}
+			}
+			return questionareList;
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+	}
+
+	public List<Questionnaire> getUnMappedQuestionnairesByPSMId(int psmId) {
+		try {
+			return ecdQuestionnaireRepo.getUnMappedQuestionnairesByPSMId(psmId);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+	public List<V_GetSectionQuestionMapping> getQuestionnairesAndSectionMappingDataByProvider(int psmId) {
+		try {
+
+			List<V_GetSectionQuestionMapping> responseList = new ArrayList<>();
+
+			List<QuestionnaireSections> sectionList = getSectionsByProvider(psmId);
+
+			if (sectionList != null && sectionList.size() > 0) {
+				for (QuestionnaireSections questionnaireSections : sectionList) {
+					List<V_GetSectionQuestionMapping> tempList = v_GetSectionQuestionMappingRepo
+							.findBySectionid(questionnaireSections.getSectionId());
+
+					responseList.addAll(tempList);
+				}
+			}
+
+			return responseList;
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+	}
+
+	@Autowired
+	private CallConfigurationRepo callConfigurationRepo;
+
+	public List<V_GetSectionQuestionMappingAssociates> getQuesAndSecMapAssociateByProvider(int psmId,
+			String ecdCallType) {
+
+		try {
+
+			CallConfiguration callConfiguration = callConfigurationRepo.getCallConfigurationByProviderAndCallType(psmId,
+					ecdCallType);
+
+			if (callConfiguration != null && callConfiguration.getCallConfigId() != null) {
+				List<V_GetSectionQuestionMappingAssociates> responseList = new ArrayList<>();
+
+				List<V_GetSectionQuestionMappingAssociates> tempList = v_GetSectionQuestionMappingAssociatesRepo
+						.findByPsmIdAndCallConfigId(psmId, callConfiguration.getCallConfigId().intValue());
+
+				if (tempList != null && tempList.size() > 0) {
+					for (V_GetSectionQuestionMappingAssociates obj : tempList) {
+						List<QuestionnaireValues> optionList = questionnaireValuesRepo
+								.findByQuestionIdAndDeleted(obj.getQuestionid(), false);
+
+						if (optionList != null && optionList.size() > 0) {
+							String[] optionArr = new String[optionList.size()];
+							int i = 0;
+
+							for (QuestionnaireValues option : optionList) {
+								optionArr[i] = option.getOptions();
+								i++;
+							}
+							obj.setOptionsArr(optionArr);
+							obj.setOptions(optionList);
+						}
+					}
+					responseList.addAll(tempList);
+				}
+
+				return responseList;
+			} else
+				throw new Exception(
+						"Not found call configuration against given ECD call type. Please contact administrator/supervisor");
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+	}
+
+	// not in use as of now
+	public ResponseSectionQuestionnaireMappingDTO getQuestionnairesAndSectionMappingDataBySectionId(int sectionId) {
+
+		try {
+			ResponseSectionQuestionnaireMappingDTO responseSectionQuestionnaireMappingDTO;
+
+			Questionnaire questionnaire;
+			List<Questionnaire> questionnaireList;
+
+			if (sectionId > 0) {
+
+				questionnaireList = new ArrayList<>();
+				responseSectionQuestionnaireMappingDTO = new ResponseSectionQuestionnaireMappingDTO();
+
+				List<V_GetSectionQuestionMapping> resultSet1 = v_GetSectionQuestionMappingRepo
+						.findBySectionid(sectionId);
+
+				if (resultSet1 != null && resultSet1.size() > 0) {
+					responseSectionQuestionnaireMappingDTO.setSectionId(sectionId);
+					responseSectionQuestionnaireMappingDTO.setSectionName(resultSet1.get(0).getSectionName());
+					responseSectionQuestionnaireMappingDTO.setPsmId(resultSet1.get(0).getPsmId());
+					for (V_GetSectionQuestionMapping viewData : resultSet1) {
+						questionnaire = new Questionnaire();
+						questionnaire.setQuestionnaireId(viewData.getQuestionid());
+						questionnaire.setQuestionnaire(viewData.getQuestion());
+						questionnaire.setQuestionRank(viewData.getQuestionRank());
+						questionnaire.setRank(viewData.getSectionQuestionRank());
+						questionnaire.setSecQuesMapId(viewData.getId());
+
+						questionnaireList.add(questionnaire);
+					}
+				}
+				responseSectionQuestionnaireMappingDTO.setQuestionIds(questionnaireList);
+
+			} else
+				throw new InvalidRequestException("NULL/Invalid section Id", "Please pass valid section Id");
+
+			return responseSectionQuestionnaireMappingDTO;
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+	}
+
+	@Transactional(rollbackOn = Exception.class)
+	public String editQuestionnaireSectionMap(SectionQuestionnaireMapping sectionQuestionnaireMapping) {
+
+		try {
+			if (sectionQuestionnaireMapping != null && sectionQuestionnaireMapping.getId() != null)
+				sectionQuestionnaireMappingRepo.save(sectionQuestionnaireMapping);
+			else
+				throw new InvalidRequestException("NULL/Empty request", "please pass valid Id");
+
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("response", "updated successfully");
+			return new Gson().toJson(responseMap);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+	
+	public List<Questionnaire> getUnMappedQuestionnaires(int psmId, int sectionId) {
+		try {
+			return ecdQuestionnaireRepo.getUnMappedQuestionnaires(psmId, sectionId);
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+
+	}
+
+}
