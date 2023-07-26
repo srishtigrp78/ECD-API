@@ -48,7 +48,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getCallDetailsReport(String request, String filename) throws Exception {
 		String[] headers = { "SNO", "User ID", "Call Time", "District Name", "Health Block Name", "PHC Name",
-				"Sub Centre Name", "Village Name", "Address", "Phone Number", "Mobile Of", "Husband Name",
+				"Sub Centre Name", "Village Name", "Address", "Phone Number", "Mobile Of", "Alternative No", "Husband Name",
 				"Mother Name", "LMP", "EDD/DOB", "Registration No", "Call Category", "Call Status",
 				"Is Verified(Yes/No)", "Is HRP", "HRP Indicators", "Call Duration", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
@@ -214,7 +214,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getCallDetailReportUnique(String request, String filename) throws Exception {
 		String[] headers = {"Sno", "User ID", "Call Time", "Mother District", "Health Block Name", "PHC Name", 
-				"Sub Center Name", "Village Name", "Address", "Phone Number", "Phone No Of Whom", "Husband Name", 
+				"Sub Center Name", "Village Name", "Address", "Phone Number", "Phone No Of Whom", "Alternative No", "Husband Name", 
 				"Mother_Name", "LMP Date", "EDD/DOB", "RegistrationNO", "CallCategory", "Callstatus", "IsVerified", 
 				"Is HRP", "HRP indicators", "CallDuration", "Remarks", "Total"};
 		String[] criteriaColumns= {"Start_Date","End_Date","Agent_ID"};
