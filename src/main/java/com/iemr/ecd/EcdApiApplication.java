@@ -25,7 +25,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.info.Contact;
+import io.swagger.v3.oas.annotations.info.Info;
+
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
+@OpenAPIDefinition(info = @Info(title = "ECD API", description = "The Early Childhood Development (ECD) Initiative by the Ministry of Health and Family Welfare (MoHFW) aims to nurture the cognitive capital of the country by enabling young children to attain their fullest potential. The initiative focuses on the critical period of brain development, which includes the 270 days of pregnancy and the first two years of the child's life, also known as the first 1,000 days.", version = "1.0", contact = @Contact(name = "AMRIT", url = "https://psmri.github.io/PSMRI/", email = "amrit@piramalswasthya.org")))
 public class EcdApiApplication {
 
 	public static void main(String[] args) {
