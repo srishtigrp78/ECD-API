@@ -151,6 +151,9 @@ public class OutboundWorkListServiceImpl {
 					if (strArr[36] != null) {
 						obj.setAnmPhoneNo(strArr[36]);
 					}
+					if (strArr[37] != null) {
+						obj.setAge(Integer.valueOf(strArr[37]));
+					}
 
 					motherList.add(obj);
 				} catch (Exception e) {

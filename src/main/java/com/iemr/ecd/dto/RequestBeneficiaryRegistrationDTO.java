@@ -73,4 +73,5 @@ public class RequestBeneficiaryRegistrationDTO {
 
 	private String firstName;
 	private String lastName;
+	private Integer age;
 }
