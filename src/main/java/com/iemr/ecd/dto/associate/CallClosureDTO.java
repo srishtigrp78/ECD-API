@@ -70,6 +70,7 @@ public class CallClosureDTO {
 	private Date lastModDate;
 	
 	private Timestamp nextCallDate;
+	private Boolean isWrongNumber;
     
 
 }

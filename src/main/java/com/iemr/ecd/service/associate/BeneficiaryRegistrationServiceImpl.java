@@ -120,7 +120,7 @@ public class BeneficiaryRegistrationServiceImpl {
 							request.getPhoneNoOfWhom(), request.getPhoneNo(), request.getLmp(), request.getEdd(),
 							request.getI_bendemographics().getAddressLine1(), request.getAshaName(),
 							request.getAshaPh(), request.getAnmName(), request.getAnmPh(), request.getPhcName(),
-							request.getBlockName());
+							request.getBlockName(), request.getAge());
 					outboundCallsRepo.updateBeneficiaryRegIdForMother(beneficiaryRegID, request.getMotherId(),
 							request.getPhoneNoOfWhom());
 				} else {
@@ -186,7 +186,7 @@ public class BeneficiaryRegistrationServiceImpl {
 							request.getPhoneNo(), request.getLmp(), request.getEdd(),
 							request.getI_bendemographics().getAddressLine1(), request.getAshaName(),
 							request.getAshaPh(), request.getAnmName(), request.getAnmPh(), request.getPhcName(),
-							request.getBlockName());
+							request.getBlockName(), request.getAge());
 
 					outboundCallsRepo.updatePhoneNoTypeForMother(request.getBeneficiaryRegID(), request.getMotherId(),
 							request.getPhoneNoOfWhom());

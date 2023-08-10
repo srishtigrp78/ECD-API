@@ -77,5 +77,6 @@ public class FetchMotherOutboundWorklist {
 	private String alternatePhoneNo;
 	private String ashaPhoneNo;
 	private String anmPhoneNo;
+	private Integer age;
 
 }

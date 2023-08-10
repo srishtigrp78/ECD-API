@@ -115,6 +115,9 @@ public class CallClosureImpl {
 				String callDurationValue = calculateCallDuration(obj.getCallTime(), callEndTime);
 				obj.setCallEndTime(callEndTime);
 				obj.setCallDuration(callDurationValue);
+				
+				if (request.getIsWrongNumber() != null)
+				obj.setIsWrongNumber(request.getIsWrongNumber());
 
 				bencallRepo.save(obj);
 			}

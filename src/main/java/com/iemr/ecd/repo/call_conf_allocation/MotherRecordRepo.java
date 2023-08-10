@@ -65,24 +65,24 @@ public interface MotherRecordRepo extends CrudRepository<MotherRecord, Long> {
 	@Modifying
 	@Transactional
 	@Query(" UPDATE MotherRecord SET beneficiaryRegID = :beneficiaryRegID, motherName = :motherName, husbandName = :husbandName, whomPhoneNo = :whomPhoneNo, phoneNo = :phoneNo, "
-			+ "lmpDate = :lmpDate, edd = :edd, address = :address, ashaName = :ashaName, ashaPh = :ashaPh, anmName = :anmName, anmPh = :anmPh, PHCName = :PHCName, blockName = :blockName WHERE ecdIdNo = :motherId ")
+			+ "lmpDate = :lmpDate, edd = :edd, address = :address, ashaName = :ashaName, ashaPh = :ashaPh, anmName = :anmName, anmPh = :anmPh, PHCName = :PHCName, blockName = :blockName, age = :age WHERE ecdIdNo = :motherId ")
 	public int updateBeneficiaryRegIdForMother(@Param("beneficiaryRegID") Long beneficiaryRegID,
 			@Param("motherId") Long motherId, @Param("motherName") String motherName,
 			@Param("husbandName") String husbandName, @Param("whomPhoneNo") String whomPhoneNo,
 			@Param("phoneNo") String phoneNo, @Param("lmpDate") Timestamp lmpDate, @Param("edd") Timestamp edd,
 			@Param("address") String address, @Param("ashaName") String ashaName, @Param("ashaPh") String ashaPh, @Param("anmName") String anmName,
-			@Param("anmPh") String anmPh, @Param("PHCName") String PHCName, @Param("blockName") String blockName);
+			@Param("anmPh") String anmPh, @Param("PHCName") String PHCName, @Param("blockName") String blockName, @Param("age") Integer age);
 
 	@Modifying
 	@Transactional
 	@Query(" UPDATE MotherRecord SET motherName = :motherName, husbandName = :husbandName, whomPhoneNo = :whomPhoneNo, phoneNo = :phoneNo, "
-			+ "lmpDate = :lmpDate, edd = :edd, address = :address, ashaName = :ashaName, ashaPh = :ashaPh, anmName = :anmName, anmPh = :anmPh, PHCName = :PHCName, blockName = :blockName WHERE ecdIdNo = :motherId AND beneficiaryRegID = :beneficiaryRegID")
+			+ "lmpDate = :lmpDate, edd = :edd, address = :address, ashaName = :ashaName, ashaPh = :ashaPh, anmName = :anmName, anmPh = :anmPh, PHCName = :PHCName, blockName = :blockName, age = :age WHERE ecdIdNo = :motherId AND beneficiaryRegID = :beneficiaryRegID")
 	public int updateBeneficiaryDetails(@Param("beneficiaryRegID") Long beneficiaryRegID,
 			@Param("motherId") Long motherId, @Param("motherName") String motherName,
 			@Param("husbandName") String husbandName, @Param("whomPhoneNo") String whomPhoneNo,
 			@Param("phoneNo") String phoneNo, @Param("lmpDate") Timestamp lmpDate, @Param("edd") Timestamp edd,
 			@Param("address") String address, @Param("ashaName") String ashaName, @Param("ashaPh") String ashaPh, @Param("anmName") String anmName,
-			@Param("anmPh") String anmPh, @Param("PHCName") String PHCName, @Param("blockName") String blockName);
+			@Param("anmPh") String anmPh, @Param("PHCName") String PHCName, @Param("blockName") String blockName, @Param("age") Integer age);
 
 	public MotherRecord findByEcdIdNo(Long motherId);
 
