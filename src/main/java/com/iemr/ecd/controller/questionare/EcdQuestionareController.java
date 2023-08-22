@@ -36,11 +36,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iemr.ecd.dao.MapQuestion;
 import com.iemr.ecd.dao.Questionnaire;
 import com.iemr.ecd.dao.QuestionnaireSections;
 import com.iemr.ecd.dao.SectionQuestionnaireMapping;
 import com.iemr.ecd.dao.V_GetSectionQuestionMapping;
 import com.iemr.ecd.dao.V_GetSectionQuestionMappingAssociates;
+import com.iemr.ecd.dto.ECDMapQuestions;
 import com.iemr.ecd.dto.RequestSectionQuestionnaireMappingDTO;
 import com.iemr.ecd.dto.ResponseSectionQuestionnaireMappingDTO;
 import com.iemr.ecd.service.questionare.QuestionareServiceImpl;
@@ -85,6 +87,19 @@ public class EcdQuestionareController {
 			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<List<Questionnaire>> getQuestionnairesByPSMId(@PathVariable int psmId) {
 		return new ResponseEntity<>(questionareServiceImpl.getQuestionaresByProvider(psmId), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/getQuestionnaires/{psmId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Fetch questionnaire", description = "Desc - Fetch questionnaire")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
+	public ResponseEntity<List<Questionnaire>> getQuestionnaires(@PathVariable int psmId) {
+		return new ResponseEntity<>(questionareServiceImpl.getQuestionares(psmId), HttpStatus.OK);
 	}
 
 	@GetMapping(value = "/getUnMappedQuestionnairesByPSMId/{psmId}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -242,6 +257,46 @@ public class EcdQuestionareController {
 	public ResponseEntity<List<Questionnaire>> getUnMappedQuestionnaires(@PathVariable int psmId,
 			@PathVariable int sectionId) {
 		return new ResponseEntity<>(questionareServiceImpl.getUnMappedQuestionnaires(psmId, sectionId), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/createQuestionnairesMap", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Create questionnaire", description = "Desc - Create questionnaire")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
+	public ResponseEntity<String> createQuestionnairesMap(@Valid @RequestBody MapQuestion questionnaireMap) {
+
+		return new ResponseEntity<>(questionareServiceImpl.createQuestionnairesMap(questionnaireMap), HttpStatus.OK);
+	}
+	
+	@PostMapping(value = "/editQuestionnairesMap", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Edit questionnnaire map", description = "Desc - Edit questionnnaire map")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
+	public ResponseEntity<String> editQuestionnairesMap(@RequestBody MapQuestion editMapQuestion) {
+		return new ResponseEntity<>(questionareServiceImpl.editQuestionnairesMap(editMapQuestion), HttpStatus.OK);
+	}
+	
+	@GetMapping(value = "/getMappedParentChildQuestionnaire/{psmId}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Fetch parent child mapped questionnaire", description = "Desc - Fetch parent child mapped questionnaire")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
+	public ResponseEntity<List<ECDMapQuestions>> getMappedParentChildQuestionnaire(@PathVariable int psmId) {
+		return new ResponseEntity<>(questionareServiceImpl.getMappedParentChildQuestionnaire(psmId), HttpStatus.OK);
 	}
 
 }

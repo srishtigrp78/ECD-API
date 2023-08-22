@@ -76,6 +76,15 @@ public class V_GetSectionQuestionMappingAssociates {
 
 	@Column(name = "callConfigId")
 	private Integer callConfigId;
+	
+	@Column(name = "parentQuestionID")
+	private Integer parentQuestionId;
+	
+	@Column(name = "parentQuestion")
+	private String parentQuestion;
+	
+	@Column(name = "parentAnswer")
+	private String parentAnswer;
 
 	@Transient
 	private List<QuestionnaireValues> options;
