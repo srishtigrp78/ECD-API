@@ -42,6 +42,8 @@ import com.iemr.ecd.dao.QualityAuditorRating;
 import com.iemr.ecd.dao.SampleSelectionConfiguration;
 import com.iemr.ecd.dao.V_get_Qualityaudit_SectionQuestionaireValues;
 import com.iemr.ecd.dao.associate.Bencall;
+import com.iemr.ecd.dto.BeneficiaryCasesheetDTO;
+import com.iemr.ecd.dto.BeneficiaryCasesheetQuestionnaireDTO;
 import com.iemr.ecd.dto.QualityAuditorWorklistRequestDTO;
 import com.iemr.ecd.dto.QualityAuditorWorklistResponseDTO;
 import com.iemr.ecd.dto.QualityQuestionareOptionsDTO;
@@ -344,4 +346,144 @@ public class QualityAuditImpl {
 		}
 
 	}
+	
+	public String getBeneficiaryCasesheet(
+			BeneficiaryCasesheetDTO request) {
+
+		try {
+			List<BeneficiaryCasesheetQuestionnaireDTO> questionnaireResponseList = new ArrayList<>();
+			BeneficiaryCasesheetDTO resultSet = new BeneficiaryCasesheetDTO();
+			BeneficiaryCasesheetQuestionnaireDTO response;
+
+			Map<String, Object> responseMap = new HashMap<>();		
+			if (request.getBenCallId()!= null) {
+				
+				// call SP to get beneficiary data and call closure details
+      List<String[]> casesheetResp = agentQualityAuditorMapRepo.getBeneficiaryCasesheet(request.getBenCallId());
+				 
+				 if(casesheetResp != null && casesheetResp.size() == 1) {
+					 
+					 String[] benDetails = casesheetResp.get(0);
+						if (benDetails[0] != null)
+                        resultSet.setBeneficiaryRegId(Long.valueOf(benDetails[0]));
+						if (benDetails[1] != null)
+							resultSet.setBenCallId(Long.valueOf(benDetails[1]));
+						if (benDetails[2] != null)
+							resultSet.setMotherId(Long.valueOf(benDetails[2]));;
+						if (benDetails[3] != null)
+							resultSet.setChildId(Long.valueOf(benDetails[3]));
+						if (benDetails[4] != null)
+							resultSet.setBeneficiaryName(benDetails[4]);
+						if (benDetails[5] != null)
+							resultSet.setMotherName(benDetails[5]);
+						if (benDetails[6] != null)
+							resultSet.setSpouseName(benDetails[6]);
+						if (benDetails[7] != null)
+							resultSet.setGenderID(Integer.valueOf(benDetails[7]));
+						if (benDetails[8] != null)
+							resultSet.setGenderName(benDetails[8]);
+						if (benDetails[9] != null)
+							resultSet.setPhoneNo(benDetails[9]);
+						if (benDetails[10] != null)
+							resultSet.setPhoneNoOfWhom(benDetails[10]);
+						if (benDetails[11] != null)
+							resultSet.setAlternatePhoneNo(benDetails[11]);
+						if (benDetails[12] != null)
+							resultSet.setDateOfBirth(benDetails[12]);
+						if (benDetails[13] != null)
+							resultSet.setLmp(benDetails[13]);
+						if (benDetails[14] != null)
+							resultSet.setEdd(benDetails[14]);
+						if (benDetails[15] != null) {
+							int newAge = Integer.parseInt(String.valueOf(benDetails[15]).split("\\.")[0]);
+							resultSet.setAge(newAge);
+						}
+						if (benDetails[16] != null)
+							resultSet.setAddress(benDetails[16]);
+						if (benDetails[17] != null)
+							resultSet.setAshaName(benDetails[17]);
+						if (benDetails[18] != null)
+							resultSet.setAshaPh(benDetails[18]);
+						if (benDetails[19] != null)
+							resultSet.setAnmName(benDetails[19]);
+						if (benDetails[20] != null)
+							resultSet.setAnmPh(benDetails[20]);
+						if (benDetails[21] != null)
+							resultSet.setPhcName(benDetails[21]);
+						if (benDetails[22] != null)
+							resultSet.setBlockName(benDetails[22]);
+						if (benDetails[23] != null)
+							resultSet.setOutboundCallType(benDetails[23]);
+						if (benDetails[24] != null)
+							resultSet.setIsFurtherCallRequired(Boolean.valueOf(benDetails[24]));
+						if (benDetails[25] != null)
+							resultSet.setReasonForNoFurtherCalls(benDetails[25]);
+						if (benDetails[26] != null)
+							resultSet.setIsCallVerified(Boolean.valueOf(benDetails[26]));
+						if (benDetails[27] != null)
+							resultSet.setIsCallAnswered(Boolean.valueOf(benDetails[27]));
+						if (benDetails[28] != null)
+							resultSet.setReasonForCallNotAnswered(benDetails[28]);
+						if (benDetails[29] != null)
+							resultSet.setIsCallDisconnected(Boolean.valueOf(benDetails[29]));
+						if (benDetails[30] != null)
+							resultSet.setTypeOfComplaint(benDetails[30]);
+						if (benDetails[31] != null)
+							resultSet.setComplaintRemarks(benDetails[31]);
+						if (benDetails[32] != null)
+							resultSet.setNextAttemptDate(benDetails[32]);
+						if (benDetails[33] != null)
+							resultSet.setCallRemarks(benDetails[33]);
+						if (benDetails[34] != null)
+							resultSet.setSendAdvice(benDetails[34]);
+						if (benDetails[35] != null)
+							resultSet.setIsWrongNumber(Boolean.valueOf(benDetails[35]));
+						if (benDetails[36] != null)
+							resultSet.setProviderServiceMapID(Integer.valueOf(benDetails[36]));
+						if (benDetails[37] != null)
+							resultSet.setCreatedDate(benDetails[37]);
+						
+						
+					 responseMap.put("beneficiaryDetails", resultSet);
+				 }
+				 
+				 
+				// call SP to get beneficiary questionnaire response
+				 List<String[]> questionnaireResultSet = agentQualityAuditorMapRepo.getBeneficiaryCallResponse(request.getBenCallId());
+				
+				 
+				if (questionnaireResultSet != null && questionnaireResultSet.size() > 0) {
+					for (String[] strings : questionnaireResultSet) {
+						response = new BeneficiaryCasesheetQuestionnaireDTO();
+						if (strings[0] != null)
+							response.setSectionId(Integer.valueOf(strings[0]));
+						if (strings[1] != null)
+							response.setSectionName(strings[1]);
+						if (strings[2] != null)
+							response.setQuestionId(Integer.valueOf(strings[2]));
+						if (strings[3] != null)
+							response.setQuestion(strings[3]);
+						if (strings[4] != null)
+							response.setAnswer(strings[4]);
+
+						
+
+						questionnaireResponseList.add(response);
+					}
+				}
+
+				responseMap.put("questionnaireResponse", questionnaireResponseList);
+				
+				return new Gson().toJson(responseMap);
+			}
+			else {
+				throw new InvalidRequestException("request : " + request,
+						"Invalid/NULL request, please pass correct data");
+			}
+						
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+	}
+		
 }

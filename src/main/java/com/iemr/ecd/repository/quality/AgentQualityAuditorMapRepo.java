@@ -30,6 +30,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.iemr.ecd.dao.AgentQualityAuditorMap;
+import com.iemr.ecd.dto.BeneficiaryCasesheetDTO;
 
 @Repository
 public interface AgentQualityAuditorMapRepo extends CrudRepository<AgentQualityAuditorMap, Integer> {
@@ -40,5 +41,12 @@ public interface AgentQualityAuditorMapRepo extends CrudRepository<AgentQualityA
 	public List<String[]> getQualityAuditorWorklist(@Param("fDate") Timestamp fDate, @Param("tDate") Timestamp tDate,
 			@Param("psmId") Integer psmId, @Param("langId") Integer langId, @Param("agentId") Integer agentId,
 			@Param("roleId") Integer roleId, @Param("isValid") Boolean isValid);
+	
+	@Query(value = " CALL db_iemr.Pr_BeneficiaryCasesheet(:benCallId) ", nativeQuery = true)
+	public List<String[]> getBeneficiaryCasesheet(@Param("benCallId") Long benCallId);
+	
+	@Query(value = " CALL db_iemr.Pr_BeneficiaryCallResponse(:benCallId) ", nativeQuery = true)
+	public List<String[]> getBeneficiaryCallResponse(@Param("benCallId") Long benCallId);
+
 
 }
