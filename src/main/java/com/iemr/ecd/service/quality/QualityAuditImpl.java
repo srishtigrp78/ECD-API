@@ -451,6 +451,7 @@ public class QualityAuditImpl {
 				// call SP to get beneficiary questionnaire response
 				 List<String[]> questionnaireResultSet = agentQualityAuditorMapRepo.getBeneficiaryCallResponse(request.getBenCallId());
 				
+				 
 				if (questionnaireResultSet != null && questionnaireResultSet.size() > 0) {
 					for (String[] strings : questionnaireResultSet) {
 						response = new BeneficiaryCasesheetQuestionnaireDTO();
