@@ -34,6 +34,8 @@ import com.iemr.ecd.dao.Questionnaire;
 public interface EcdQuestionnaireRepo extends CrudRepository<Questionnaire, Integer> {
 
 	List<Questionnaire> findByPsmId(Integer psmId);
+	
+	List<Questionnaire> findByPsmIdAndDeleted(Integer psmId, Boolean deleted);
 
 	Questionnaire findByQuestionnaireId(int qId);
 
