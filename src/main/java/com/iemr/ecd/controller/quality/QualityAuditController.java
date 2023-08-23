@@ -39,6 +39,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.iemr.ecd.dao.GradeConfiguration;
+import com.iemr.ecd.dto.BeneficiaryCasesheetDTO;
 import com.iemr.ecd.dto.QualityAuditorWorklistRequestDTO;
 import com.iemr.ecd.dto.QualityAuditorWorklistResponseDTO;
 import com.iemr.ecd.dto.ResponseCallAuditSectionQuestionMapDTO;
@@ -146,5 +147,23 @@ public class QualityAuditController {
 		jsnOBJ = jsnElmnt.getAsJsonObject();
 
 		return new ResponseEntity<>(qualityAuditImpl.callReaudit(jsnOBJ), HttpStatus.OK);
+	}
+	
+	
+	@PostMapping(value = "/getBeneficiaryCasesheet", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Fetch casesheet for beneficiary", description = "Desc - Fetch casesheet for beneficiary")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
+	public ResponseEntity<String> getBeneficiaryCasesheet(
+			@RequestBody BeneficiaryCasesheetDTO request) {
+
+		return new ResponseEntity<>(qualityAuditImpl.getBeneficiaryCasesheet(request),
+				HttpStatus.OK);
+
 	}
 }
