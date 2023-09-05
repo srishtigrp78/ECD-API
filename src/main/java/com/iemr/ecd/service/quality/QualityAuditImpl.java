@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,156 +88,142 @@ public class QualityAuditImpl {
 
 	public List<QualityAuditorWorklistResponseDTO> getQualityAuditorWorklist(
 			QualityAuditorWorklistRequestDTO qualityAuditorWorklistRequestDTO) {
-
+		List<QualityAuditorWorklistResponseDTO> responseList = new ArrayList<>();
 		try {
-			List<QualityAuditorWorklistResponseDTO> responseList = new ArrayList<>();
+
 			QualityAuditorWorklistResponseDTO response;
+			Integer preDate = null;
+			Integer preFromDay = null;
+			Integer preToDay = null;
+			SampleSelectionConfiguration sampleSelectionConfiguration = null;
+			if (null != qualityAuditorWorklistRequestDTO.getCycleId()) {
+				List<Object[]> dates = sampleSelectionConfigurationRepo
+						.getdate(qualityAuditorWorklistRequestDTO.getCycleId());
+				Object[] obj = dates.get(0);
+				
+				Integer fromDay = (Integer)obj[0];
+				Integer toDay = (Integer)obj[1];
+				if (null != fromDay && fromDay == 1) {
+					preDate = 31;
+					sampleSelectionConfiguration = sampleSelectionConfigurationRepo
+							.getSampleSelectionConfiguration(preDate);
+					preFromDay = sampleSelectionConfiguration.getFromDay();
+					preToDay = sampleSelectionConfiguration.getToDay();
+					qualityAuditorWorklistRequestDTO.setPrevCycleFromDate(getTimeStampFromDateValue(qualityAuditorWorklistRequestDTO,preFromDay,1));
+					qualityAuditorWorklistRequestDTO.setPrevCycleToDate(getTimeStampToDateValue(qualityAuditorWorklistRequestDTO,preToDay,1));
+					//calling SP to get work-list data
+					responseList = getWorkListData(qualityAuditorWorklistRequestDTO);
 
-			// create from-date & to-date from cycle info
-			if (qualityAuditorWorklistRequestDTO.getCycleId() != null) {
-				List<SampleSelectionConfiguration> resultList = sampleSelectionConfigurationRepo
-						.findByCycleIdAndDeletedAndPsmId(qualityAuditorWorklistRequestDTO.getCycleId(), false,
-								qualityAuditorWorklistRequestDTO.getPsmId());
-
-				if (resultList != null && resultList.size() > 0) {
-					SampleSelectionConfiguration obj = resultList.get(0);
-					// from_date
-					Calendar cal1 = new GregorianCalendar();
-					cal1.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
-					cal1.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - 1);
-					cal1.set(Calendar.DATE, obj.getFromDay());
-					cal1.set(Calendar.HOUR_OF_DAY, 0);
-					cal1.set(Calendar.MINUTE, 0);
-					cal1.set(Calendar.SECOND, 0);
-					cal1.set(Calendar.MILLISECOND, 0);
-					Timestamp fDate = new Timestamp(cal1.getTimeInMillis());
-
-					// to_date
-					Calendar cal2 = new GregorianCalendar();
-					cal2.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
-					cal2.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - 1);
-					cal2.set(Calendar.DATE, obj.getToDay());
-					cal2.set(Calendar.HOUR_OF_DAY, 23);
-					cal2.set(Calendar.MINUTE, 59);
-					cal2.set(Calendar.SECOND, 59);
-					cal2.set(Calendar.MILLISECOND, 59);
-					Timestamp tDate = new Timestamp(cal2.getTimeInMillis());
-
-					qualityAuditorWorklistRequestDTO.setFromDate(fDate);
-					qualityAuditorWorklistRequestDTO.setToDate(tDate);
-
-					if (qualityAuditorWorklistRequestDTO.getFromDate().getDate() == 1) {
-						Calendar cal = Calendar.getInstance();
-						cal.setTime(qualityAuditorWorklistRequestDTO.getFromDate());
-						cal.add(Calendar.MONTH, -1);
-						cal.set(Calendar.DAY_OF_MONTH, 30);
-						qualityAuditorWorklistRequestDTO.setFromDate(new Timestamp(cal.getTimeInMillis()));
-
-					} else if (qualityAuditorWorklistRequestDTO.getFromDate().getDate() != 1) {
-						Calendar cal = Calendar.getInstance();
-						cal.setTime(qualityAuditorWorklistRequestDTO.getFromDate());
-						cal.add(Calendar.DAY_OF_MONTH, -1);
-						qualityAuditorWorklistRequestDTO.setFromDate(new Timestamp(cal.getTimeInMillis()));
-					}
-					
-
-				} else
-					throw new ECDException(
-							"given cycle is not available for the provider, please contact administrator");
-
-				List<SampleSelectionConfiguration> previousCycle = sampleSelectionConfigurationRepo.findPreviousCycle(
-						qualityAuditorWorklistRequestDTO.getPsmId(), qualityAuditorWorklistRequestDTO.getFromDate());
-
-				if (previousCycle != null && previousCycle.size() > 0) {
-					SampleSelectionConfiguration obj = previousCycle.get(0);
-
-					// from_date
-					Calendar cal1 = new GregorianCalendar();
-					cal1.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
-					if (obj.getToDay() == 30 || obj.getToDay() == 31) {
-						cal1.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - 2);
-					} else {
-						cal1.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - 1);
-					}
-                    cal1.set(Calendar.DATE, obj.getFromDay());
-					cal1.set(Calendar.HOUR_OF_DAY, 0);
-					cal1.set(Calendar.MINUTE, 0);
-					cal1.set(Calendar.SECOND, 0);
-					cal1.set(Calendar.MILLISECOND, 0);
-					Timestamp fDate = new Timestamp(cal1.getTimeInMillis());
-
-					// to_date
-					Calendar cal2 = new GregorianCalendar();
-					cal2.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
-					if (obj.getToDay() == 30 || obj.getToDay() == 31) {
-						cal2.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - 2);
-					} else {
-						cal2.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - 1);
-					}
-					cal2.set(Calendar.DATE, obj.getToDay());
-					cal2.set(Calendar.HOUR_OF_DAY, 23);
-					cal2.set(Calendar.MINUTE, 59);
-					cal2.set(Calendar.SECOND, 59);
-					cal2.set(Calendar.MILLISECOND, 59);
-					Timestamp tDate = new Timestamp(cal2.getTimeInMillis());
-
-					qualityAuditorWorklistRequestDTO.setPrevCycleFromDate(fDate);
-					qualityAuditorWorklistRequestDTO.setPrevCycleToDate(tDate);
-
-				} else
-					throw new ECDException(
-							"given cycle is not available for the provider, please contact administrator");
-
-			} else
-				throw new InvalidRequestException("invalid/NULL cycle id : ", "please pass cycle info to get the data");
-
-			// call SP to get work-list data
-			List<String[]> resultSet = agentQualityAuditorMapRepo.getQualityAuditorWorklist(
-					qualityAuditorWorklistRequestDTO.getFromDate(), qualityAuditorWorklistRequestDTO.getToDate(),
-					qualityAuditorWorklistRequestDTO.getPsmId(), qualityAuditorWorklistRequestDTO.getLanguageId(),
-					qualityAuditorWorklistRequestDTO.getAgentId(), qualityAuditorWorklistRequestDTO.getRoleId(),
-					qualityAuditorWorklistRequestDTO.getIsValid(), qualityAuditorWorklistRequestDTO.getCycleId(),
-					qualityAuditorWorklistRequestDTO.getPrevCycleFromDate(),
-					qualityAuditorWorklistRequestDTO.getPrevCycleToDate());
-
-			if (resultSet != null && resultSet.size() > 0) {
-				for (String[] strings : resultSet) {
-					response = new QualityAuditorWorklistResponseDTO();
-					if (strings[0] != null)
-						response.setBeneficiaryid(Long.valueOf(strings[0]));
-					if (strings[1] != null)
-						response.setBeneficiaryname(strings[1]);
-					if (strings[2] != null)
-						response.setPhoneNo(strings[2]);
-					if (strings[3] != null)
-						response.setAgentid(Integer.valueOf(strings[3]));
-					if (strings[4] != null)
-						response.setAgetname(strings[4]);
-					if (strings[5] != null)
-						response.setCalltype(strings[5]);
-					if (strings[6] != null)
-						response.setBenCallID(Long.valueOf(strings[6]));
-					if (strings[7] != null)
-						response.setIsCallAudited(Boolean.valueOf(strings[7]));
-					if (strings[8] != null)
-						response.setOutboundCallType(strings[8]);
-					if (strings[9] != null)
-						response.setRoleID(Integer.valueOf(strings[9]));
-					if (strings[10] != null)
-						response.setRoleName(strings[10]);
-					if (strings[11] != null)
-						response.setCallId(strings[11]);
-
-					responseList.add(response);
+				} else if (null != fromDay && fromDay != 1) {
+					preDate = fromDay - 1;
+					sampleSelectionConfiguration = sampleSelectionConfigurationRepo
+							.getSampleSelectionConfiguration(preDate);
+					preFromDay = sampleSelectionConfiguration.getFromDay();
+					preToDay = sampleSelectionConfiguration.getToDay();
+					qualityAuditorWorklistRequestDTO.setPrevCycleFromDate(getTimeStampFromDateValue(qualityAuditorWorklistRequestDTO,preFromDay,0));
+					qualityAuditorWorklistRequestDTO.setPrevCycleToDate(getTimeStampToDateValue(qualityAuditorWorklistRequestDTO,preToDay,0));
+					//calling SP to get work-list data
+					responseList = getWorkListData(qualityAuditorWorklistRequestDTO);
 				}
 			}
-
-			return responseList;
 
 		} catch (Exception e) {
 			throw new ECDException(e);
 		}
+		return responseList;
 	}
+
+	private Timestamp getTimeStampFromDateValue(QualityAuditorWorklistRequestDTO qualityAuditorWorklistRequestDTO,
+			Integer preDay, Integer minusMonth) {
+		Timestamp date = null;
+		try {
+			Calendar call = Calendar.getInstance();
+			call.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			call.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - minusMonth - 1);
+			call.set(Calendar.DATE, preDay);
+			call.set(Calendar.HOUR_OF_DAY, 0);
+			call.set(Calendar.MINUTE, 0);
+			call.set(Calendar.SECOND, 0);
+			call.set(Calendar.MILLISECOND, 0);
+			date = new Timestamp(call.getTimeInMillis());
+			
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+		return date;
+
+	}
+
+	private Timestamp getTimeStampToDateValue(QualityAuditorWorklistRequestDTO qualityAuditorWorklistRequestDTO,
+			Integer preDay, Integer minusMonth) {
+		Timestamp date = null;
+		try {
+			Calendar cal2 = Calendar.getInstance();
+			cal2.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			cal2.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - minusMonth -1);
+			cal2.set(Calendar.DATE, preDay);
+			cal2.set(Calendar.HOUR_OF_DAY, 23);
+			cal2.set(Calendar.MINUTE, 59);
+			cal2.set(Calendar.SECOND, 59);
+			cal2.set(Calendar.MILLISECOND, 59);
+			date = new Timestamp(cal2.getTimeInMillis());
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+		return date;
+
+	}
+	
+	public List<QualityAuditorWorklistResponseDTO> getWorkListData(
+			QualityAuditorWorklistRequestDTO qualityAuditorWorklistRequestDTO) {
+		List<QualityAuditorWorklistResponseDTO> responseList = new ArrayList<>();
+		QualityAuditorWorklistResponseDTO response;
+		List<String[]> resultSet = agentQualityAuditorMapRepo.getQualityAuditorWorklist(
+				qualityAuditorWorklistRequestDTO.getFromDate(), qualityAuditorWorklistRequestDTO.getToDate(),
+				qualityAuditorWorklistRequestDTO.getPsmId(), qualityAuditorWorklistRequestDTO.getLanguageId(),
+				qualityAuditorWorklistRequestDTO.getAgentId(), qualityAuditorWorklistRequestDTO.getRoleId(),
+				qualityAuditorWorklistRequestDTO.getIsValid(), qualityAuditorWorklistRequestDTO.getCycleId(),
+				qualityAuditorWorklistRequestDTO.getPrevCycleFromDate(),
+				qualityAuditorWorklistRequestDTO.getPrevCycleToDate());
+
+		if (resultSet != null && resultSet.size() > 0) {
+			for (String[] strings : resultSet) {
+				response = new QualityAuditorWorklistResponseDTO();
+				if (strings[0] != null)
+					response.setBeneficiaryid(Long.valueOf(strings[0]));
+				if (strings[1] != null)
+					response.setBeneficiaryname(strings[1]);
+				if (strings[2] != null)
+					response.setPhoneNo(strings[2]);
+				if (strings[3] != null)
+					response.setAgentid(Integer.valueOf(strings[3]));
+				if (strings[4] != null)
+					response.setAgetname(strings[4]);
+				if (strings[5] != null)
+					response.setCalltype(strings[5]);
+				if (strings[6] != null)
+					response.setBenCallID(Long.valueOf(strings[6]));
+				if (strings[7] != null)
+					response.setIsCallAudited(Boolean.valueOf(strings[7]));
+				if (strings[8] != null)
+					response.setOutboundCallType(strings[8]);
+				if (strings[9] != null)
+					response.setRoleID(Integer.valueOf(strings[9]));
+				if (strings[10] != null)
+					response.setRoleName(strings[10]);
+				if (strings[11] != null)
+					response.setCallId(strings[11]);
+
+				responseList.add(response);
+			}
+		}
+
+		return responseList;
+
+	}
+
+
+	
 
 	//Method to fetch call audit data datewise
 		public List<QualityAuditorWorklistDatewiseResponseDTO> getQualityAuditorWorklistDatewise(
