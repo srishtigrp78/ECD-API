@@ -42,5 +42,10 @@ public interface SampleSelectionConfigurationRepo extends CrudRepository<SampleS
 	@Query("SELECT t FROM SampleSelectionConfiguration t WHERE t.psmId=:psmId AND DAY(:fromDate) BETWEEN t.fromDay AND t.toDay")
 	List<SampleSelectionConfiguration> findPreviousCycle(@Param("psmId") Integer psmId,
 			@Param("fromDate") Timestamp fromDate);
+	@Query("SELECT t.fromDay, t.toDay FROM SampleSelectionConfiguration t WHERE t.cycleId=:cycleId AND t.deleted = false")
+	List<Object[]> getdate(@Param("cycleId") Integer cycleId);
+
+	@Query("SELECT t FROM SampleSelectionConfiguration t WHERE t.toDay=:preDate AND t.deleted = false")
+	SampleSelectionConfiguration getSampleSelectionConfiguration(Integer preDate);
 
 }
