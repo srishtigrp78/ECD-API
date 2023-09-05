@@ -334,6 +334,7 @@ public class QualityAuditImpl {
 							responseDTO.setQuestion(obj.getQuestion());
 						if (obj.getQuestionRank() != null)
 							responseDTO.setQuestionRank(obj.getQuestionRank());
+						responseDTO.setIsFatalQues(obj.getIsFatalQues());
 
 						option = new QualityQuestionareOptionsDTO();
 						options = new ArrayList<>();

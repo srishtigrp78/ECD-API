@@ -21,6 +21,7 @@
 */
 package com.iemr.ecd.repository.quality;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,9 +29,8 @@ import com.iemr.ecd.dao.associate.Bencall;
 
 @Repository
 public interface T_benCallRepo extends CrudRepository<Bencall, Long> {
-	
 
-	
-	
+	@Query(value = "Select CallTypeID from db_iemr.m_calltype where CallType= 'default null callType' order by CreatedDate DESC LIMIT 1", nativeQuery = true)
+	public Integer getCallTypeId();
 
 }
