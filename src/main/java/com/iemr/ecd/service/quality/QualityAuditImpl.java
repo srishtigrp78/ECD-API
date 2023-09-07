@@ -98,7 +98,7 @@ public class QualityAuditImpl {
 			SampleSelectionConfiguration sampleSelectionConfiguration = null;
 			if (null != qualityAuditorWorklistRequestDTO.getCycleId()) {
 				List<Object[]> dates = sampleSelectionConfigurationRepo
-						.getdate(qualityAuditorWorklistRequestDTO.getCycleId());
+						.getdate(qualityAuditorWorklistRequestDTO.getCycleId(), qualityAuditorWorklistRequestDTO.getPsmId());
 				Object[] obj = dates.get(0);
 				
 				Integer fromDay = (Integer)obj[0];
@@ -111,6 +111,8 @@ public class QualityAuditImpl {
 					preToDay = sampleSelectionConfiguration.getToDay();
 					qualityAuditorWorklistRequestDTO.setPrevCycleFromDate(getTimeStampFromDateValue(qualityAuditorWorklistRequestDTO,preFromDay,1));
 					qualityAuditorWorklistRequestDTO.setPrevCycleToDate(getTimeStampToDateValue(qualityAuditorWorklistRequestDTO,preToDay,1));
+					qualityAuditorWorklistRequestDTO.setFromDate(getTimeStampFromDate(qualityAuditorWorklistRequestDTO, fromDay));
+					qualityAuditorWorklistRequestDTO.setToDate(getTimeStampToDate(qualityAuditorWorklistRequestDTO,toDay));
 					//calling SP to get work-list data
 					responseList = getWorkListData(qualityAuditorWorklistRequestDTO);
 
@@ -122,6 +124,8 @@ public class QualityAuditImpl {
 					preToDay = sampleSelectionConfiguration.getToDay();
 					qualityAuditorWorklistRequestDTO.setPrevCycleFromDate(getTimeStampFromDateValue(qualityAuditorWorklistRequestDTO,preFromDay,0));
 					qualityAuditorWorklistRequestDTO.setPrevCycleToDate(getTimeStampToDateValue(qualityAuditorWorklistRequestDTO,preToDay,0));
+					qualityAuditorWorklistRequestDTO.setFromDate(getTimeStampFromDate(qualityAuditorWorklistRequestDTO, fromDay));
+					qualityAuditorWorklistRequestDTO.setToDate(getTimeStampToDate(qualityAuditorWorklistRequestDTO,toDay));
 					//calling SP to get work-list data
 					responseList = getWorkListData(qualityAuditorWorklistRequestDTO);
 				}
@@ -138,7 +142,11 @@ public class QualityAuditImpl {
 		Timestamp date = null;
 		try {
 			Calendar call = Calendar.getInstance();
-			call.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			if(qualityAuditorWorklistRequestDTO.getMonth() == 1) {
+				call.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear() -0);
+			}else {
+				call.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			}
 			call.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - minusMonth - 1);
 			call.set(Calendar.DATE, preDay);
 			call.set(Calendar.HOUR_OF_DAY, 0);
@@ -159,8 +167,53 @@ public class QualityAuditImpl {
 		Timestamp date = null;
 		try {
 			Calendar cal2 = Calendar.getInstance();
-			cal2.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			if(qualityAuditorWorklistRequestDTO.getMonth() ==1) {
+				cal2.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear() -0);
+			}else {
+				cal2.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			}
 			cal2.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - minusMonth -1);
+			cal2.set(Calendar.DATE, preDay);
+			cal2.set(Calendar.HOUR_OF_DAY, 23);
+			cal2.set(Calendar.MINUTE, 59);
+			cal2.set(Calendar.SECOND, 59);
+			cal2.set(Calendar.MILLISECOND, 59);
+			date = new Timestamp(cal2.getTimeInMillis());
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+		return date;
+
+	}
+	
+	private Timestamp getTimeStampFromDate(QualityAuditorWorklistRequestDTO qualityAuditorWorklistRequestDTO,
+			Integer preDay) {
+		Timestamp date = null;
+		try {
+			Calendar call = Calendar.getInstance();
+			call.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			call.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() - 1);
+			call.set(Calendar.DATE, preDay);
+			call.set(Calendar.HOUR_OF_DAY, 0);
+			call.set(Calendar.MINUTE, 0);
+			call.set(Calendar.SECOND, 0);
+			call.set(Calendar.MILLISECOND, 0);
+			date = new Timestamp(call.getTimeInMillis());
+			
+		} catch (Exception e) {
+			throw new ECDException(e);
+		}
+		return date;
+
+	}
+
+	private Timestamp getTimeStampToDate(QualityAuditorWorklistRequestDTO qualityAuditorWorklistRequestDTO,
+			Integer preDay) {
+		Timestamp date = null;
+		try {
+			Calendar cal2 = Calendar.getInstance();
+			cal2.set(Calendar.YEAR, qualityAuditorWorklistRequestDTO.getYear());
+			cal2.set(Calendar.MONTH, qualityAuditorWorklistRequestDTO.getMonth() -1);
 			cal2.set(Calendar.DATE, preDay);
 			cal2.set(Calendar.HOUR_OF_DAY, 23);
 			cal2.set(Calendar.MINUTE, 59);
@@ -321,6 +374,7 @@ public class QualityAuditImpl {
 							responseDTO.setQuestion(obj.getQuestion());
 						if (obj.getQuestionRank() != null)
 							responseDTO.setQuestionRank(obj.getQuestionRank());
+						responseDTO.setIsFatalQues(obj.getIsFatalQues());
 
 						option = new QualityQuestionareOptionsDTO();
 						options = new ArrayList<>();

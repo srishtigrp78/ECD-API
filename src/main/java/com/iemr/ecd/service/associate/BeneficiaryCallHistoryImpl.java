@@ -130,7 +130,7 @@ public class BeneficiaryCallHistoryImpl {
 		try {
 			bencall.setCallTime(Timestamp.from(Instant.now()));
 			if(bencall.getCallTypeId() == null)
-				bencall.setCallTypeId(9999);
+				bencall.setCallTypeId(t_benCallRepo.getCallTypeId());
 			Bencall callDetails = t_benCallRepo.save(bencall);
 			resMap.put("benCallId", callDetails.getBenCallId().toString());
 
