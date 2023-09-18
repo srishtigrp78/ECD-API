@@ -107,6 +107,10 @@ public class QualityAuditImpl {
 					preDate = 31;
 					sampleSelectionConfiguration = sampleSelectionConfigurationRepo
 							.getSampleSelectionConfiguration(preDate);
+					if(sampleSelectionConfiguration == null) {
+						List<SampleSelectionConfiguration> resultSet = sampleSelectionConfigurationRepo.getSampleSize(preDate);
+						sampleSelectionConfiguration = resultSet.get(resultSet.size() - 1);
+					}
 					preFromDay = sampleSelectionConfiguration.getFromDay();
 					preToDay = sampleSelectionConfiguration.getToDay();
 					qualityAuditorWorklistRequestDTO.setPrevCycleFromDate(getTimeStampFromDateValue(qualityAuditorWorklistRequestDTO,preFromDay,1));

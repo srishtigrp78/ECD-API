@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -31,7 +32,7 @@ public class MapQuestion {
 	private int childQuestionId;
 
 	@Column(name = "AnswerType")
-	private String answer;
+	private String answerDb;
 
 	@Column(name = "ProviderServiceMapID")
 	private int psmId;
@@ -50,6 +51,10 @@ public class MapQuestion {
 
 	@Column(name = "LastModDate", insertable = false, updatable = false)
 	private Timestamp lastModDate;
+	
+	@Transient
+	private String[] answer;
+
 	
 
 }

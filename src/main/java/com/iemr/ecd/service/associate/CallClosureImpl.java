@@ -82,8 +82,10 @@ public class CallClosureImpl {
 
 				if (request.getReasonForNoFurtherCalls() != null)
 					obj.setReasonForNoFurtherCalls(request.getReasonForNoFurtherCalls());
-
-				obj.setIsCallVerified(request.getIsCallVerified());
+				
+				if(request.getIsCallVerified() != null) {
+					obj.setIsCallVerified(request.getIsCallVerified());
+				}
 				obj.setIsCallAnswered(request.getIsCallAnswered());
 
 				if (request.getReasonForCallNotAnswered() != null)
