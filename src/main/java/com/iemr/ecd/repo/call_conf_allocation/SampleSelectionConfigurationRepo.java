@@ -47,5 +47,8 @@ public interface SampleSelectionConfigurationRepo extends CrudRepository<SampleS
 
 	@Query("SELECT t FROM SampleSelectionConfiguration t WHERE t.toDay=:preDate AND t.deleted = false")
 	SampleSelectionConfiguration getSampleSelectionConfiguration(Integer preDate);
+	
+	@Query("SELECT t FROM SampleSelectionConfiguration t WHERE t.toDay<:preDate AND t.deleted = false")
+	List<SampleSelectionConfiguration> getSampleSize(Integer preDate);
 
 }

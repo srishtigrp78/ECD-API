@@ -15,7 +15,7 @@ public class ECDMapQuestions {
 	private Integer id;
 	private Integer parentQuestionId;
 	private String parentQuestion;
-	private String answer;
+	private String[] answer;
 	private Integer childQuestionId;
 	private String childQuestion;
 	private Integer psmId;

@@ -23,6 +23,8 @@ package com.iemr.ecd.dao;
 
 import java.util.List;
 
+import com.iemr.ecd.dto.ParentAnswer;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -78,13 +80,13 @@ public class V_GetSectionQuestionMappingAssociates {
 	private Integer callConfigId;
 	
 	@Column(name = "parentQuestionID")
-	private Integer parentQuestionId;
+	private String parentQuestionIdDb;
 	
 	@Column(name = "parentQuestion")
-	private String parentQuestion;
+	private String parentQuestionDb;
 	
 	@Column(name = "parentAnswer")
-	private String parentAnswer;
+	private String parentAnswerDb;
 
 	@Transient
 	private List<QuestionnaireValues> options;
@@ -93,4 +95,10 @@ public class V_GetSectionQuestionMappingAssociates {
 	
 	@Column(name = "Role")
 	private String role;
+	@Transient
+	private int[] parentQuestionId;
+	@Transient
+	private String[] parentQuestion;
+	@Transient
+	private List<ParentAnswer> parentAnswer;
 }

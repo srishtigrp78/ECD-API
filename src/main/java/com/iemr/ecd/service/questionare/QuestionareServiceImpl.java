@@ -22,6 +22,7 @@
 package com.iemr.ecd.service.questionare;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +40,7 @@ import com.iemr.ecd.dao.SectionQuestionnaireMapping;
 import com.iemr.ecd.dao.V_GetSectionQuestionMapping;
 import com.iemr.ecd.dao.V_GetSectionQuestionMappingAssociates;
 import com.iemr.ecd.dto.ECDMapQuestions;
+import com.iemr.ecd.dto.ParentAnswer;
 import com.iemr.ecd.dto.RequestSectionQuestionnaireMappingDTO;
 import com.iemr.ecd.dto.ResponseSectionQuestionnaireMappingDTO;
 import com.iemr.ecd.repo.call_conf_allocation.CallConfigurationRepo;
@@ -353,7 +355,6 @@ public class QuestionareServiceImpl {
 						if (optionList != null && optionList.size() > 0) {
 							String[] optionArr = new String[optionList.size()];
 							int i = 0;
-
 							for (QuestionnaireValues option : optionList) {
 								optionArr[i] = option.getOptions();
 								i++;
@@ -361,10 +362,14 @@ public class QuestionareServiceImpl {
 							obj.setOptionsArr(optionArr);
 							obj.setOptions(optionList);
 						}
+						if (obj.getParentQuestionDb() != null) {
+							obj.setParentQuestion(obj.getParentQuestionDb().split(","));
+						}
+						List<ParentAnswer> parentAnswerList = setListOfParentAnswers(obj);
+						obj.setParentAnswer(parentAnswerList);
 					}
 					responseList.addAll(tempList);
 				}
-
 				return responseList;
 			} else
 				throw new Exception(
@@ -372,6 +377,30 @@ public class QuestionareServiceImpl {
 		} catch (Exception e) {
 			throw new ECDException(e);
 		}
+	}
+
+	private List<ParentAnswer> setListOfParentAnswers(V_GetSectionQuestionMappingAssociates obj) {
+		List<ParentAnswer> parentAnswerList = new ArrayList<>();
+		if (obj.getParentQuestionIdDb() != null) {
+			String[] split = obj.getParentQuestionIdDb().split(",");
+			int size = split.length;
+			int[] arr = new int[size];
+			for (int i = 0; i < size; i++) {
+				arr[i] = Integer.parseInt(split[i]);
+			}
+			obj.setParentQuestionId(arr);
+			int length = split.length;
+			for (int i = 0; i < length; i++) {
+				ParentAnswer parentAnswer = new ParentAnswer();
+
+				int id = Integer.parseInt(split[i]);
+				parentAnswer.setParentQuesId(id);
+				String[] split2 = obj.getParentAnswerDb().split("\\|\\|");
+				parentAnswer.setParentAnswerList(split2[i].split(","));
+				parentAnswerList.add(parentAnswer);
+			}
+		}
+		return parentAnswerList;
 	}
 
 	// not in use as of now
@@ -457,8 +486,23 @@ public class QuestionareServiceImpl {
 	public String createQuestionnairesMap(MapQuestion questionnaireMap) {
 
 		try {
+			MapQuestion mapQuestion = new MapQuestion();
+			mapQuestion.setParentQuestionId(questionnaireMap.getParentQuestionId());
+			mapQuestion.setChildQuestionId(questionnaireMap.getChildQuestionId());
+			mapQuestion.setCreatedBy(questionnaireMap.getCreatedBy());
+			mapQuestion.setPsmId(questionnaireMap.getPsmId());
 
-			mapQuestionRepo.save(questionnaireMap);
+			if (questionnaireMap.getAnswer() != null && questionnaireMap.getAnswer().length > 0) {
+				StringBuffer sb = new StringBuffer();
+				for (String answer : questionnaireMap.getAnswer()) {
+					sb.append(answer).append(",");
+				}
+				if (sb.length() >= 1) {
+					mapQuestion.setAnswerDb(sb.substring(0, sb.length() - 1));
+				}
+			}
+
+			mapQuestionRepo.save(mapQuestion);
 
 			Map<String, Object> responseMap = new HashMap<>();
 			responseMap.put("response", "created successfully");
@@ -472,8 +516,18 @@ public class QuestionareServiceImpl {
 	@Transactional(rollbackOn = Exception.class)
 	public String editQuestionnairesMap(MapQuestion editMapQuestion) {
 		try {
-			if (editMapQuestion != null && editMapQuestion.getId() != null)
+			if (editMapQuestion != null && editMapQuestion.getId() != null) {
+				if (editMapQuestion.getAnswer() != null && editMapQuestion.getAnswer().length > 0) {
+					StringBuffer sb = new StringBuffer();
+					for (String answer : editMapQuestion.getAnswer()) {
+						sb.append(answer).append(",");
+					}
+					if (sb.length() >= 1) {
+						editMapQuestion.setAnswerDb(sb.substring(0, sb.length() - 1));
+					}
+				}
 				mapQuestionRepo.save(editMapQuestion);
+			}
 
 			Map<String, Object> responseMap = new HashMap<>();
 			responseMap.put("response", "Questionnaire Map Updated Successfully");
@@ -487,6 +541,7 @@ public class QuestionareServiceImpl {
 	public List<ECDMapQuestions> getMappedParentChildQuestionnaire(int psmId) {
 		try {
 			List<String[]> mappingList = mapQuestionRepo.getMappedParentChildQuestionnaire(psmId);
+
 			return getMappedQuestionList(mappingList);
 
 		} catch (Exception e) {
@@ -507,8 +562,10 @@ public class QuestionareServiceImpl {
 						obj.setParentQuestionId(Integer.valueOf(strArr[1]));
 					if (strArr[2] != null)
 						obj.setParentQuestion(strArr[2]);
-					if (strArr[3] != null)
-						obj.setAnswer(strArr[3]);
+					if (strArr[3] != null) {
+						String[] answerArray = strArr[3].split(",");
+						obj.setAnswer(answerArray);
+					}
 					if (strArr[4] != null)
 						obj.setChildQuestionId(Integer.valueOf(strArr[4]));
 					if (strArr[5] != null)
