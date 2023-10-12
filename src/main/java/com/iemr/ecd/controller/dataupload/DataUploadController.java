@@ -1,4 +1,25 @@
-package com.iemr.ecd.controller.data_upload;
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
+package com.iemr.ecd.controller.dataupload;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +40,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-/***
- * 
- * @author NE298657
- *
- */
-
 @RestController
 @CrossOrigin()
 public class DataUploadController {
@@ -43,7 +58,6 @@ public class DataUploadController {
 			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> allocateCalls(@RequestHeader("Authorization") String Authorization,
 			@RequestBody RCHFileUploadDto rchFileUploadDto) {
-		// add logic to create call configuration
 		return new ResponseEntity<>(rchDataUploadServiceImpl.uploadRCDData(rchFileUploadDto), HttpStatus.OK);
 	}
 

@@ -1,3 +1,24 @@
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
 package com.iemr.ecd.service.quality;
 
 import java.sql.Timestamp;
@@ -103,16 +124,19 @@ public class QualityAuditQuestionConfigurationImpl {
 						obj.setAnswerType(strArr[6]);
 					if (strArr[7] != null)
 						obj.setPsmId(Integer.valueOf(strArr[7]));
-					if (strArr[8] != null)
-						obj.setDeleted(Boolean.valueOf(strArr[8]));
+					if(strArr[8] != null)
+						obj.setIsFatalQues(Boolean.valueOf(strArr[8]));
 					if (strArr[9] != null)
-						obj.setCreatedBy(strArr[9]);
+						obj.setDeleted(Boolean.valueOf(strArr[9]));
 					if (strArr[10] != null)
-						obj.setCreatedDate(Timestamp.valueOf(strArr[10]));
+						obj.setCreatedBy(strArr[10]);
 					if (strArr[11] != null)
-						obj.setModifiedBy(strArr[11]);
+						obj.setCreatedDate(Timestamp.valueOf(strArr[11]));
 					if (strArr[12] != null)
-						obj.setLastModDate(Timestamp.valueOf(strArr[12]));
+						obj.setModifiedBy(strArr[12]);
+					if (strArr[13] != null)
+						obj.setLastModDate(Timestamp.valueOf(strArr[13]));
+					
 
 					List<QualityAuditQuestionnaireValues> optionsList = qualityAuditQuestionnaireValuesRepo
 							.findByQuestionIdAndPsmIdAndDeleted(obj.getQuestionId(), obj.getPsmId(), false);

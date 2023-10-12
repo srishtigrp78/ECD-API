@@ -1,3 +1,24 @@
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
 package com.iemr.ecd.service.report;
 
 import java.io.ByteArrayInputStream;
@@ -27,7 +48,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getCallDetailsReport(String request, String filename) throws Exception {
 		String[] headers = { "SNO", "User ID", "Call Time", "District Name", "Health Block Name", "PHC Name",
-				"Sub Centre Name", "Village Name", "Address", "Phone Number", "Mobile Of", "Husband Name",
+				"Sub Centre Name", "Village Name", "Address", "Phone Number", "Mobile Of", "Alternative No", "Husband Name",
 				"Mother Name", "LMP", "EDD/DOB", "Registration No", "Call Category", "Call Status",
 				"Is Verified(Yes/No)", "Is HRP", "HRP Indicators", "Call Duration", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
@@ -193,7 +214,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getCallDetailReportUnique(String request, String filename) throws Exception {
 		String[] headers = {"Sno", "User ID", "Call Time", "Mother District", "Health Block Name", "PHC Name", 
-				"Sub Center Name", "Village Name", "Address", "Phone Number", "Phone No Of Whom", "Husband Name", 
+				"Sub Center Name", "Village Name", "Address", "Phone Number", "Phone No Of Whom", "Alternative No", "Husband Name", 
 				"Mother_Name", "LMP Date", "EDD/DOB", "RegistrationNO", "CallCategory", "Callstatus", "IsVerified", 
 				"Is HRP", "HRP indicators", "CallDuration", "Remarks", "Total"};
 		String[] criteriaColumns= {"Start_Date","End_Date","Agent_ID"};

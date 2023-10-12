@@ -1,3 +1,24 @@
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
 package com.iemr.ecd.service.associate;
 
 import java.sql.Timestamp;
@@ -108,6 +129,8 @@ public class BeneficiaryCallHistoryImpl {
 		Map<String, String> resMap = new HashMap<>();
 		try {
 			bencall.setCallTime(Timestamp.from(Instant.now()));
+			if(bencall.getCallTypeId() == null)
+				bencall.setCallTypeId(t_benCallRepo.getCallTypeId());
 			Bencall callDetails = t_benCallRepo.save(bencall);
 			resMap.put("benCallId", callDetails.getBenCallId().toString());
 
@@ -139,52 +162,15 @@ public class BeneficiaryCallHistoryImpl {
 					ecdCallResponse.setPsmId(requestBeneficiaryQuestionnaireResponseDTO.getPsmId());
 					ecdCallResponse.setCreatedBy(requestBeneficiaryQuestionnaireResponseDTO.getCreatedBy());
 					ecdCallResponse.setBenCallId(requestBeneficiaryQuestionnaireResponseDTO.getBenCallId());
-					// hrp-reason arr to string
-					if (ecdCallResponse.getReasonsForHrp() != null && ecdCallResponse.getReasonsForHrp().length > 0) {
-						StringBuffer sb = new StringBuffer();
-						int pointer = 0;
-						for (String hrpReason : ecdCallResponse.getReasonsForHrp()) {
-
-							sb.append(hrpReason);
-							if (pointer < (ecdCallResponse.getReasonsForHrp().length - 1))
-								sb.append("||");
-							pointer++;
-						}
-						if (sb.length() > 0)
-							ecdCallResponse.setReasonsForHrpDB(sb.toString());
-					}
-					// hrni-reason arr to string
-					if (ecdCallResponse.getReasonsForHrni() != null && ecdCallResponse.getReasonsForHrni().length > 0) {
-						StringBuffer sb = new StringBuffer();
-						int pointer = 0;
-						for (String hrniReason : ecdCallResponse.getReasonsForHrni()) {
-							sb.append(hrniReason);
-							if (pointer < (ecdCallResponse.getReasonsForHrni().length - 1))
-								sb.append("||");
-							pointer++;
-
-						}
-						if (sb.length() > 0)
-							ecdCallResponse.setReasonsForHrniDB(sb.toString());
-					}
-					// congentialAnomalies arr to string
-					if (ecdCallResponse.getCongentialAnomalies() != null
-							&& ecdCallResponse.getCongentialAnomalies().length > 0) {
-						StringBuffer sb = new StringBuffer();
-						int pointer = 0;
-						for (String congentialAnomalies : ecdCallResponse.getCongentialAnomalies()) {
-							sb.append(congentialAnomalies);
-							if (pointer < (ecdCallResponse.getCongentialAnomalies().length - 1))
-								sb.append("||");
-							pointer++;
-
-						}
-						if (sb.length() > 0)
-							ecdCallResponse.setCongentialAnomaliesDB(sb.toString());
-					}
 
 				}
 				ecdCallResponseRepo.saveAll(responseList);
+				String callResponseList = ecdCallResponseRepo.getEcdCallResponseList(
+						requestBeneficiaryQuestionnaireResponseDTO.getBenCallId(),
+						requestBeneficiaryQuestionnaireResponseDTO.getObCallId());
+
+				if (!callResponseList.equals("Updation has done Successfully"))
+					throw new ECDException("SP is not updated");
 
 			} else
 				throw new InvalidRequestException("NULL/Invalid questions", "pass valid question-answer");

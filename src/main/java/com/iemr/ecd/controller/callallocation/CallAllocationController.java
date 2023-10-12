@@ -1,4 +1,25 @@
-package com.iemr.ecd.controller.call_allocation_configuration;
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
+package com.iemr.ecd.controller.callallocation;
 
 import java.text.ParseException;
 
@@ -25,14 +46,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-/***
- * 
- * @author NE298657
- *
- */
-
 @RestController
-@RequestMapping(value = "/callAllocation",headers = "Authorization")
+@RequestMapping(value = "/callAllocation", headers = "Authorization")
 @CrossOrigin()
 public class CallAllocationController {
 
@@ -47,14 +62,12 @@ public class CallAllocationController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> allocateCalls(@RequestBody RequestCallAllocationDTO callAllocationDto)
 			throws ParseException {
-		// add logic to create call configuration
 		return new ResponseEntity<>(callAllocationImpl.allocateCalls(callAllocationDto), HttpStatus.OK);
 	}
 
-	// date-range, record-type, phone-no-type => total no of eligible records
 	@GetMapping(value = "/getEligibleRecordsInfo/{psmId}/{phoneNoType}/{recordType}/{fDate}/{tDate}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Fetch eligible records for allocation", description = "Desc - Fetch eligible records for allocation")
 	@ApiResponses(value = {
@@ -63,7 +76,7 @@ public class CallAllocationController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<ResponseEligibleCallRecordsDTO> getEligibleRecordsInfo(@PathVariable int psmId,
 			@PathVariable String phoneNoType, @PathVariable String recordType, @PathVariable String fDate,
 			@PathVariable String tDate) throws Exception {
@@ -80,7 +93,7 @@ public class CallAllocationController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<String> getAllocatedCallCountUser(@RequestBody RequestCallAllocationDTO callAllocationDto) {
 		return new ResponseEntity<>(callAllocationImpl.getAllocatedCallCountUser(callAllocationDto), HttpStatus.OK);
 
@@ -94,7 +107,7 @@ public class CallAllocationController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> reAllocateCalls(@RequestBody RequestCallAllocationDTO callAllocationDto) {
 		// add logic to create call configuration
 		return new ResponseEntity<>(callAllocationImpl.reAllocateCalls(callAllocationDto), HttpStatus.OK);
@@ -108,7 +121,7 @@ public class CallAllocationController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<String> updateAlerts(@RequestBody RequestCallAllocationDTO callAllocationDto) {
 		return new ResponseEntity<>(callAllocationImpl.moveAllocatedCallsToBin(callAllocationDto), HttpStatus.OK);
 	}

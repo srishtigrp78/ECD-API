@@ -1,3 +1,24 @@
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
 package com.iemr.ecd.controller.associate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +52,7 @@ public class BeneficiaryRegistrationController {
 
 	@CrossOrigin()
 	@PostMapping(value = "/registration", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Create Beneficiary registration", description = "Desc - Create Beneficiary registration")
+	@Operation(summary = "Create beneficiary registration", description = "Desc - Create Beneficiary registration")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
 					@Content(mediaType = "application/json") }),
@@ -48,7 +69,7 @@ public class BeneficiaryRegistrationController {
 
 	@CrossOrigin()
 	@PostMapping(value = "/updateBeneficiaryDetails", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Update Beneficiary details", description = "Desc - Update Beneficiary details")
+	@Operation(summary = "Update beneficiary details", description = "Desc - Update Beneficiary details")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
 					@Content(mediaType = "application/json") }),

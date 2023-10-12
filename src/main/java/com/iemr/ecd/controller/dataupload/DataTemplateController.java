@@ -1,4 +1,25 @@
-package com.iemr.ecd.controller.data_upload;
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
+package com.iemr.ecd.controller.dataupload;
 
 import java.io.IOException;
 
@@ -25,14 +46,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
-/***
- * 
- * @author NE298657
- *
- */
-
 @RestController
-@RequestMapping(value = "/dataTemplate",headers = "Authorization")
+@RequestMapping(value = "/dataTemplate", headers = "Authorization")
 @CrossOrigin()
 public class DataTemplateController {
 
@@ -47,7 +62,7 @@ public class DataTemplateController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> uploadTemplate(@RequestBody DataTemplate dataTemplate)
 			throws ParseException, InvalidFormatException, IOException {
 		return new ResponseEntity<>(dataTemplateServiceImpl.uploadTemplate(dataTemplate), HttpStatus.OK);
@@ -62,22 +77,10 @@ public class DataTemplateController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> downloadTemplate(@PathVariable Integer psmId, @PathVariable String fileType) {
 		return new ResponseEntity<>(dataTemplateServiceImpl.downloadTemplate(psmId, fileType), HttpStatus.OK);
 
 	}
-	
-//	@PostMapping(value = "/update/templateUpload", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-//	@Operation(summary = "Update template", description = "Desc - Update template")
-//	@ApiResponses(value = {
-//			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
-//					@Content(mediaType = "application/json") }),
-//			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
-//			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
-//			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC) })
-//	public ResponseEntity<Object> updateTemplateUpload(@RequestBody DataTemplate dataTemplate) {
-//		return new ResponseEntity<>(dataTemplateServiceImpl.updateTemplateUpload(dataTemplate), HttpStatus.OK);
-//
-//	}
+
 }

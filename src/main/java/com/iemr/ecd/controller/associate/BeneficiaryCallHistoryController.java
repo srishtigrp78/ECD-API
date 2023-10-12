@@ -1,3 +1,24 @@
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
 package com.iemr.ecd.controller.associate;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +45,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 @RestController
-@RequestMapping(value = "/callHistory",headers = "Authorization")
+@RequestMapping(value = "/callHistory", headers = "Authorization")
 @CrossOrigin()
 public class BeneficiaryCallHistoryController {
 	@Autowired
@@ -38,7 +59,7 @@ public class BeneficiaryCallHistoryController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> getBeneficiaryCallHistory(
 			@RequestParam(value = "motherId", required = false) Long motherId,
 			@RequestParam(value = "childId", required = false) Long childId) {
@@ -47,41 +68,41 @@ public class BeneficiaryCallHistoryController {
 	}
 
 	@GetMapping(value = "/getBeneficiaryCallDetails/{obCallId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Fetch call details for Beneficiary", description = "Desc - Fetch call details for Beneficiary")
+	@Operation(summary = "Fetch call details for beneficiary", description = "Desc - Fetch call details for Beneficiary")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
 					@Content(mediaType = "application/json") }),
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> getBeneficiaryCallDetails(@PathVariable Long obCallId) {
 		return new ResponseEntity<>(beneficiaryCallHistoryImpl.getBeneficiaryCallDetails(obCallId), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/saveBenCallDetails", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Saving Beneficiary call details", description = "Desc - Saving Beneficiary call details")
+	@Operation(summary = "Saving beneficiary call details", description = "Desc - Saving Beneficiary call details")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
 					@Content(mediaType = "application/json") }),
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<String> saveBenCallDetails(@RequestBody Bencall bencall) {
 
 		return new ResponseEntity<>(beneficiaryCallHistoryImpl.saveBenCallDetails(bencall), HttpStatus.OK);
 	}
 
 	@PostMapping(value = "/create/beneficiaryQuestionnaireResponse", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Saving questionnaire responses of Beneficiary", description = "Desc - Saving questionnaire responses of Beneficiary")
+	@Operation(summary = "Saving questionnaire responses of beneficiary", description = "Desc - Saving questionnaire responses of Beneficiary")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
 					@Content(mediaType = "application/json") }),
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<String> saveBeneficiaryQuestionnaireResponse(
 			@RequestBody RequestBeneficiaryQuestionnaireResponseDTO requestBeneficiaryQuestionnaireResponseDTO) {
 
@@ -97,7 +118,7 @@ public class BeneficiaryCallHistoryController {
 			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
 			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
-			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC)})
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
 	public ResponseEntity<Object> getHrpHrniDetails(@RequestParam(value = "motherId", required = false) Long motherId,
 			@RequestParam(value = "childId", required = false) Long childId) {
 		return new ResponseEntity<>(beneficiaryCallHistoryImpl.getHrpHrniDetails(motherId, childId), HttpStatus.OK);

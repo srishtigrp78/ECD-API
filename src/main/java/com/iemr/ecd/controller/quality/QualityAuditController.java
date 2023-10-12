@@ -1,3 +1,24 @@
+/*
+* AMRIT – Accessible Medical Records via Integrated Technology
+* Integrated EHR (Electronic Health Records) Solution
+*
+* Copyright (C) "Piramal Swasthya Management and Research Institute"
+*
+* This file is part of AMRIT.
+*
+* This program is free software: you can redistribute it and/or modify
+* it under the terms of the GNU General Public License as published by
+* the Free Software Foundation, either version 3 of the License, or
+* (at your option) any later version.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*
+* You should have received a copy of the GNU General Public License
+* along with this program.  If not, see https://www.gnu.org/licenses/.
+*/
 package com.iemr.ecd.controller.quality;
 
 import java.util.List;
@@ -18,6 +39,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.iemr.ecd.dao.GradeConfiguration;
+import com.iemr.ecd.dto.BeneficiaryCasesheetDTO;
+import com.iemr.ecd.dto.QualityAuditorWorklistDatewiseRequestDTO;
+import com.iemr.ecd.dto.QualityAuditorWorklistDatewiseResponseDTO;
 import com.iemr.ecd.dto.QualityAuditorWorklistRequestDTO;
 import com.iemr.ecd.dto.QualityAuditorWorklistResponseDTO;
 import com.iemr.ecd.dto.ResponseCallAuditSectionQuestionMapDTO;
@@ -52,10 +76,26 @@ public class QualityAuditController {
 				HttpStatus.OK);
 
 	}
+	
+	@PostMapping(value = "/getQualityAuditorWorklistDatewise", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Fetch quality auditor worklist according to date", description = "Desc - Fetch quality auditor worklist datewise")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
+	public ResponseEntity<List<QualityAuditorWorklistDatewiseResponseDTO>> getQualityAuditorWorklistDatewise(
+			@RequestBody QualityAuditorWorklistDatewiseRequestDTO qualityAuditorWorklistDatewiseRequestDTO) {
 
-	// anil have created SP
+		return new ResponseEntity<>(qualityAuditImpl.getQualityAuditorWorklistDatewise(qualityAuditorWorklistDatewiseRequestDTO),
+				HttpStatus.OK);
+
+	}
+
 	@GetMapping(value = "/getQuestionSectionForCallRatings/{psmId}", produces = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "Fetch question and section for call ratings", description = "Desc - Fetch question and section for call ratings")
+	@Operation(summary = "Fetch question section for call rating", description = "Desc - Fetch question and section for call ratings")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
 					@Content(mediaType = "application/json") }),
@@ -69,7 +109,6 @@ public class QualityAuditController {
 
 	}
 
-	// single master
 	@GetMapping(value = "/getQualityAuditGradesByPSMID/{psmId}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@Operation(summary = "Fetch quality audit grades", description = "Desc - Fetch quality audit grades")
 	@ApiResponses(value = {
@@ -111,7 +150,7 @@ public class QualityAuditController {
 	}
 
 	@PostMapping(value = "/call-reaudit", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	@Operation(summary = "call reaudit", description = "Desc - call reaudit")
+	@Operation(summary = "Call reaudit", description = "Desc - call reaudit")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
 					@Content(mediaType = "application/json") }),
@@ -127,5 +166,23 @@ public class QualityAuditController {
 		jsnOBJ = jsnElmnt.getAsJsonObject();
 
 		return new ResponseEntity<>(qualityAuditImpl.callReaudit(jsnOBJ), HttpStatus.OK);
+	}
+	
+	
+	@PostMapping(value = "/getBeneficiaryCasesheet", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	@Operation(summary = "Fetch casesheet for beneficiary", description = "Desc - Fetch casesheet for beneficiary")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = CustomExceptionResponse.SUCCESS_SC_V, description = CustomExceptionResponse.SUCCESS_SC, content = {
+					@Content(mediaType = "application/json") }),
+			@ApiResponse(responseCode = CustomExceptionResponse.NOT_FOUND_SC_V, description = CustomExceptionResponse.NOT_FOUND_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC_V, description = CustomExceptionResponse.INTERNAL_SERVER_ERROR_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.DB_EXCEPTION_SC_V, description = CustomExceptionResponse.DB_EXCEPTION_SC),
+			@ApiResponse(responseCode = CustomExceptionResponse.BAD_REQUEST_SC_V, description = CustomExceptionResponse.BAD_REQUEST_SC) })
+	public ResponseEntity<String> getBeneficiaryCasesheet(
+			@RequestBody BeneficiaryCasesheetDTO request) {
+
+		return new ResponseEntity<>(qualityAuditImpl.getBeneficiaryCasesheet(request),
+				HttpStatus.OK);
+
 	}
 }
