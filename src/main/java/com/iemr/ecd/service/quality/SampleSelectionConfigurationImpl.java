@@ -56,7 +56,7 @@ public class SampleSelectionConfigurationImpl {
 
 	public List<SampleSelectionConfiguration> getSampleSelectionConfigurationByPSMId(Integer psmId) {
 		try {
-			return sampleSelectionConfigurationRepo.findByPsmId(psmId);
+			return sampleSelectionConfigurationRepo.findByPsmIdOrderByLastModDateDesc(psmId);
 		} catch (Exception e) {
 			throw new ECDException(e);
 		}

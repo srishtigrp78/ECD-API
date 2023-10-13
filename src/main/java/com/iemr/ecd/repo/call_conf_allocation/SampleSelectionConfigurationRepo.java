@@ -35,7 +35,7 @@ import com.iemr.ecd.dao.SampleSelectionConfiguration;
 
 public interface SampleSelectionConfigurationRepo extends CrudRepository<SampleSelectionConfiguration, Integer> {
 
-	List<SampleSelectionConfiguration> findByPsmId(Integer psmId);
+	List<SampleSelectionConfiguration> findByPsmIdOrderByLastModDateDesc(Integer psmId);
 
 	List<SampleSelectionConfiguration> findByCycleIdAndDeletedAndPsmId(Integer cycleId, Boolean deleted, Integer psmId);
 
