@@ -82,8 +82,8 @@ public class CallClosureImpl {
 
 				if (request.getReasonForNoFurtherCalls() != null)
 					obj.setReasonForNoFurtherCalls(request.getReasonForNoFurtherCalls());
-				
-				if(request.getIsCallVerified() != null) {
+
+				if (request.getIsCallVerified() != null) {
 					obj.setIsCallVerified(request.getIsCallVerified());
 				}
 				obj.setIsCallAnswered(request.getIsCallAnswered());
@@ -117,9 +117,9 @@ public class CallClosureImpl {
 				String callDurationValue = calculateCallDuration(obj.getCallTime(), callEndTime);
 				obj.setCallEndTime(callEndTime);
 				obj.setCallDuration(callDurationValue);
-				
+
 				if (request.getIsWrongNumber() != null)
-				obj.setIsWrongNumber(request.getIsWrongNumber());
+					obj.setIsWrongNumber(request.getIsWrongNumber());
 
 				bencallRepo.save(obj);
 			}
@@ -150,17 +150,24 @@ public class CallClosureImpl {
 
 				if (request.getIsHrp() != null) {
 					callObj.setIsHighRisk(request.getIsHrp());
-				} else {
+				}
+//				else {
+//					callObj.setIsHrni(request.getIsHrni());
+//				}
+				if (request.getIsHrni() != null) {
 					callObj.setIsHrni(request.getIsHrni());
 				}
 
-				if ((callObj.getCallAttemptNo() + 1) >= callConfigurationDetail.getNoOfAttempts()) {
-					callObj.setCallStatus("Completed");
+				if (request.getNextAttemptDate() != null) {
+					Timestamp nextCallDate = getTimestampFromString(request.getNextAttemptDate());
+					callObj.setNextCallDate(nextCallDate);
+					callObj.setCallStatus("Open");
+
 				} else {
-					if (request.getNextAttemptDate() != null) {
-						Timestamp nextCallDate = getTimestampFromString(request.getNextAttemptDate());
-						callObj.setNextCallDate(nextCallDate);
+					if ((callObj.getCallAttemptNo() + 1) >= callConfigurationDetail.getNoOfAttempts()) {
+						callObj.setCallStatus("Completed");
 					}
+
 				}
 
 				callObj.setCallAttemptNo(callObj.getCallAttemptNo() + 1);
