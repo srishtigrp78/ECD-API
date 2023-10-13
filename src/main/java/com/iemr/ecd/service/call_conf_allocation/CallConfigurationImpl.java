@@ -148,7 +148,7 @@ public class CallConfigurationImpl {
 
 			if (callConfigId != null && callConfigId > 0) {
 				List<CallSectionMapping> callSectionMappingList = callSectionMappingRepo
-						.findByPsmIdAndCallConfigIdAndDeleted(psmId, callConfigId, false);
+						.findByPsmIdAndCallConfigIdAndDeletedOrderByLastModDateDesc(psmId, callConfigId, false);
 
 				if (callSectionMappingList != null && callSectionMappingList.size() > 0) {
 					for (CallSectionMapping callSectionMapping : callSectionMappingList) {
@@ -162,7 +162,7 @@ public class CallConfigurationImpl {
 					}
 				}
 			} else {
-				List<CallSectionMapping> callSectionMappingList = callSectionMappingRepo.findByPsmIdAndDeleted(psmId,
+				List<CallSectionMapping> callSectionMappingList = callSectionMappingRepo.findByPsmIdAndDeletedOrderByLastModDateDesc(psmId,
 						false);
 
 				if (callSectionMappingList != null && callSectionMappingList.size() > 0) {

@@ -31,7 +31,7 @@ import com.iemr.ecd.dao.QuestionnaireSections;
 @Repository
 public interface QuestionnaireSectionRepo extends CrudRepository<QuestionnaireSections, Long> {
 
-	List<QuestionnaireSections> findByPsmId(Integer psmIds);
+	List<QuestionnaireSections> findByPsmIdOrderByLastModDateDesc(Integer psmIds);
 	
 	List<QuestionnaireSections> findByPsmIdAndDeleted(Integer psmId, Boolean deleted);
 

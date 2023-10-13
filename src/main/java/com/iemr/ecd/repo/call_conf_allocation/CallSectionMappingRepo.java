@@ -31,8 +31,8 @@ import com.iemr.ecd.dao.CallSectionMapping;
 @Repository
 public interface CallSectionMappingRepo extends CrudRepository<CallSectionMapping, Integer> {
 
-	List<CallSectionMapping> findByPsmIdAndCallConfigIdAndDeleted(Integer psmId, Integer callConfigId, Boolean deleted);
+	List<CallSectionMapping> findByPsmIdAndCallConfigIdAndDeletedOrderByLastModDateDesc(Integer psmId, Integer callConfigId, Boolean deleted);
 
-	List<CallSectionMapping> findByPsmIdAndDeleted(Integer psmId, Boolean deleted);
+	List<CallSectionMapping> findByPsmIdAndDeletedOrderByLastModDateDesc(Integer psmId, Boolean deleted);
 
 }

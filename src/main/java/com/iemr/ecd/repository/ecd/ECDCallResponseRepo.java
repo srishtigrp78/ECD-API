@@ -46,6 +46,8 @@ public interface ECDCallResponseRepo extends JpaRepository<ECDCallResponse, Long
 
 	@Query(value = "call PR_UpdateHRP_HRniReasons(:benCallId, :obCallId)", nativeQuery = true)
 	String getEcdCallResponseList(@Param("benCallId") Long benCallId, @Param("obCallId") Long obCallId);
+	
+	List<ECDCallResponse> findByObCallIdOrderByCreatedDateDesc(Long obCallId);
 
 //	@Query(value = "call Pr_GetHRPDetails(:childId)", nativeQuery = true)
 //	List<String[]> getHrniDetailsForChild(@Param("childId") Long childId);

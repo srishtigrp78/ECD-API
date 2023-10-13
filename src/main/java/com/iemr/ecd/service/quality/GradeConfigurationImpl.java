@@ -56,7 +56,7 @@ public class GradeConfigurationImpl {
 
 	public List<GradeConfiguration> getGradeConfigurationByPSMId(Integer psmId) {
 		try {
-			return gradeConfigurationRepo.findByPsmId(psmId);
+			return gradeConfigurationRepo.findByPsmIdOrderByLastModDateDesc(psmId);
 		} catch (Exception e) {
 			throw new ECDException(e);
 		}

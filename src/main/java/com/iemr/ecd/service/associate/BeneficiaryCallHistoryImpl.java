@@ -129,7 +129,7 @@ public class BeneficiaryCallHistoryImpl {
 		Map<String, String> resMap = new HashMap<>();
 		try {
 			bencall.setCallTime(Timestamp.from(Instant.now()));
-			if(bencall.getCallTypeId() == null)
+			if (bencall.getCallTypeId() == null)
 				bencall.setCallTypeId(t_benCallRepo.getCallTypeId());
 			Bencall callDetails = t_benCallRepo.save(bencall);
 			resMap.put("benCallId", callDetails.getBenCallId().toString());
@@ -171,7 +171,7 @@ public class BeneficiaryCallHistoryImpl {
 
 				if (!callResponseList.equals("Updation has done Successfully"))
 					throw new ECDException("SP is not updated");
-
+				
 			} else
 				throw new InvalidRequestException("NULL/Invalid questions", "pass valid question-answer");
 
