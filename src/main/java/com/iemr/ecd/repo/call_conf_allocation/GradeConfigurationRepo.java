@@ -33,7 +33,7 @@ public interface GradeConfigurationRepo extends CrudRepository<GradeConfiguratio
 
 	List<GradeConfiguration> findByDeleted(Boolean deleted);
 
-	List<GradeConfiguration> findByPsmId(Integer psmId);
+	List<GradeConfiguration> findByPsmIdOrderByLastModDateDesc(Integer psmId);
 
 	List<GradeConfiguration> findByPsmIdAndDeleted(Integer psmId, Boolean deleted);
 

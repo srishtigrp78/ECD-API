@@ -31,6 +31,6 @@ import com.iemr.ecd.dao.QualityAuditSectionConfiguration;
 @Repository
 public interface QualityAuditSectionConfigurationRepo extends CrudRepository<QualityAuditSectionConfiguration, Integer>{
 	
-	List<QualityAuditSectionConfiguration> findByPsmId(Integer psmId);
+	List<QualityAuditSectionConfiguration> findByPsmIdOrderByLastModDateDesc(Integer psmId);
 
 }

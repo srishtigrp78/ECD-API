@@ -293,7 +293,7 @@ public class QualityAuditImpl {
 				// create from-date & to-date from cycle info
 				if (qualityAuditorWorklistDatewiseRequestDTO.getValidFrom()!=null && qualityAuditorWorklistDatewiseRequestDTO.getValidTill()!= null) {
 					List<SampleSelectionConfiguration> resultList = sampleSelectionConfigurationRepo
-							.findByPsmId(qualityAuditorWorklistDatewiseRequestDTO.getPsmId());
+							.findByPsmIdOrderByLastModDateDesc(qualityAuditorWorklistDatewiseRequestDTO.getPsmId());
 
 					if (resultList != null && resultList.size() > 0) {
 						SampleSelectionConfiguration obj = resultList.get(0);

@@ -57,7 +57,7 @@ public class QualityAuditSectionConfigurationImpl {
 
 	public List<QualityAuditSectionConfiguration> getQualityAuditSectionConfigurationByPSMId(Integer psmId) {
 		try {
-			return qualityAuditSectionConfigurationRepo.findByPsmId(psmId);
+			return qualityAuditSectionConfigurationRepo.findByPsmIdOrderByLastModDateDesc(psmId);
 		} catch (Exception e) {
 			throw new ECDException(e);
 		}

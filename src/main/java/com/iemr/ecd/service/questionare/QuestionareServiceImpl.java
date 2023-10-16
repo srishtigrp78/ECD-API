@@ -147,7 +147,7 @@ public class QuestionareServiceImpl {
 	public List<QuestionnaireSections> getSectionsByProvider(int psmId) {
 		try {
 			if (psmId > 0)
-				return questionnaireSectionRepo.findByPsmId(psmId);
+				return questionnaireSectionRepo.findByPsmIdOrderByLastModDateDesc(psmId);
 			else
 				throw new InvalidRequestException("psmId :" + psmId, "Invalid request parameter");
 		} catch (Exception e) {
@@ -222,7 +222,7 @@ public class QuestionareServiceImpl {
 	public List<Questionnaire> getQuestionaresByProvider(int psmId) {
 		try {
 
-			List<Questionnaire> questionareList = ecdQuestionnaireRepo.findByPsmId(psmId);
+			List<Questionnaire> questionareList = ecdQuestionnaireRepo.findByPsmIdOrderByLastModDateDesc(psmId);
 
 			if (questionareList != null && questionareList.size() > 0) {
 
@@ -258,7 +258,7 @@ public class QuestionareServiceImpl {
 	public List<Questionnaire> getQuestionares(int psmId) {
 		try {
 
-			List<Questionnaire> questionareList = ecdQuestionnaireRepo.findByPsmIdAndDeleted(psmId, false);
+			List<Questionnaire> questionareList = ecdQuestionnaireRepo.findByPsmIdAndDeletedOrderByLastModDateDesc(psmId, false);
 
 			if (questionareList != null && questionareList.size() > 0) {
 
