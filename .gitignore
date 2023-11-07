@@ -2,7 +2,8 @@ mvnw
 mvnw.cmd
 /logs
 mvn/wrapper 
- /target
-
+target
+.idea
+.DS_Store
  # Properties
-src/main/environment/ecd_local.properties
+src/main/environment/ecd_example.properties
