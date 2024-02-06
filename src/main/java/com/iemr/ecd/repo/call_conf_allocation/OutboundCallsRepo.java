@@ -285,4 +285,9 @@ public interface OutboundCallsRepo extends CrudRepository<OutboundCalls, Long> {
 	
 	
 
+	@Query(value = " SELECT t FROM OutboundCalls AS t WHERE t.psmId=:psmId AND "
+			+ " t.callStatus=:callStatus AND t.ecdCallType=:ecdCallType AND t.beneficiaryRegId IS NOT NULL")
+	List<OutboundCalls> getIntroductoryRecordsUser(@Param("psmId") Integer psmId,
+			@Param("callStatus") String callStatus, @Param("ecdCallType") String ecdCallType);
+
 }
