@@ -247,7 +247,7 @@ public interface OutboundCallsRepo extends CrudRepository<OutboundCalls, Long> {
 
 	@Modifying
 	@Transactional
-	@Query(" UPDATE OutboundCalls SET beneficiaryRegId = :beneficiaryRegId, phoneNumberType = :phoneNumberType WHERE motherId = :motherId AND childId IS NULL ")
+	@Query(" UPDATE OutboundCalls obc SET beneficiaryRegId = :beneficiaryRegId, phoneNumberType = :phoneNumberType WHERE motherId = :motherId AND childId IS NULL ")
 	public int updateBeneficiaryRegIdForMother(@Param("beneficiaryRegId") Long beneficiaryRegId,
 			@Param("motherId") Long motherId, @Param("phoneNumberType") String phoneNumberType);
 

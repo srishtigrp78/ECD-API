@@ -129,6 +129,7 @@ public class CallClosureImpl {
 			if (callObj != null) {
 
 				callConfigurationDetails = callConfigurationRepo.getCallConfiguration(request.getPsmId());
+				//if()
 				CallConfiguration callConfigurationDetail = callConfigurationDetails.get(0);
 
 				if (obj.getIsCallAnswered() != null && obj.getIsCallAnswered()) {
