@@ -30,6 +30,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +54,9 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class CallClosureImpl {
+	
+	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	
 	@Autowired
 	private BencallRepo bencallRepo;
 
@@ -178,6 +183,18 @@ public class CallClosureImpl {
 				throw new ECDException(
 						"Outbound call record not found in DB for given ObCallId : " + request.getObCallId());
 
+			// Updating HRP/HRNi for Upcoming Calls
+			if (callObj.getEcdCallType() != null && !callObj.getEcdCallType().equalsIgnoreCase("introductory")) {
+				if (callObj.getMotherId() != null && callObj.getChildId() != null && callObj.getIsHrni() != null) {
+					// Child
+					outboundCallsRepo.updateHRNIForUpcomingCall(callObj.getChildId(), callObj.getIsHrni());
+				} else if (callObj.getMotherId() != null && callObj.getChildId() == null
+						&& callObj.getIsHighRisk() != null) {
+					// Mother
+					outboundCallsRepo.updateHRPForUpcomingCall(callObj.getMotherId(), callObj.getIsHighRisk());
+				}
+
+			}
 			// sticky agents
 			if (request.getIsStickyAgentRequired() != null && request.getIsStickyAgentRequired()) {
 				if (request.getChildId() != null)
