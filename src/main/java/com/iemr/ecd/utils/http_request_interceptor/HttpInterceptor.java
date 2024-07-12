@@ -50,7 +50,13 @@ public class HttpInterceptor implements HandlerInterceptor {
 		if (request.getRequestURI().toLowerCase().contains("swagger-ui"))
 			return status;
 
-		String authorization = request.getHeader("Authorization");
+	//	String authorization = request.getHeader("Authorization");
+		String authorization = null;
+		String preAuth = request.getHeader("Authorization");
+		if(null != preAuth && preAuth.contains("Bearer "))
+			authorization=preAuth.replace("Bearer ", "");
+		else
+			authorization = preAuth;
 		if (!request.getMethod().equalsIgnoreCase("OPTIONS")) {
 			try {
 				String[] requestURIParts = request.getRequestURI().split("/");
@@ -79,10 +85,12 @@ public class HttpInterceptor implements HandlerInterceptor {
 					if (authorization == null)
 						throw new Exception(
 								"Authorization key is NULL, please pass valid session key to proceed further. ");
-					String userRespFromRedis = redisStorage.getSessionObject(authorization);
-					if (userRespFromRedis == null)
-						throw new Exception("invalid Authorization key, please pass a valid key to proceed further. ");
-					break;
+					/*
+					 * String userRespFromRedis = redisStorage.getSessionObject(authorization); if
+					 * (userRespFromRedis == null) throw new
+					 * Exception("invalid Authorization key, please pass a valid key to proceed further. "
+					 * ); break;
+					 */
 				}
 			} catch (Exception e) {
 				logger.error(e.getLocalizedMessage());
@@ -108,7 +116,13 @@ public class HttpInterceptor implements HandlerInterceptor {
 		logger.info("http interceptor - post Handle");
 		try {
 
-			String authorization = request.getHeader("Authorization");
+	//		String authorization = request.getHeader("Authorization");
+			String authorization = null;
+			String postAuth = request.getHeader("Authorization");
+			if(null != postAuth && postAuth.contains("Bearer "))
+				authorization=postAuth.replace("Bearer ", "");
+			else
+				authorization = postAuth;
 			logger.debug("RequestURI::" + request.getRequestURI() + " || Authorization ::" + authorization);
 			if (authorization != null) {
 				redisStorage.updateConcurrentSessionObject(redisStorage.getSessionObject(authorization));
