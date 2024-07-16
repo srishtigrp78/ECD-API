@@ -238,7 +238,7 @@
 
 
 	<build>
-		<finalName>ecdapi</finalName>
+		<finalName>ecdapi-v3.0.0</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.owasp</groupId>
