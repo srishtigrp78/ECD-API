@@ -53,7 +53,7 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		
+
 		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
@@ -138,11 +138,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-	<dependency>
-    <groupId>com.fasterxml.jackson.core</groupId>
-    <artifactId>jackson-databind</artifactId>
-    <version>2.17.0-rc1</version>
-</dependency>
+
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<dependency>
 			<groupId>com.google.guava</groupId>
@@ -167,11 +163,7 @@
 			<artifactId>json</artifactId>
 			<version>20240205</version>
 		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.datatype</groupId>
-			<artifactId>jackson-datatype-joda</artifactId>
-			<version>2.16.1</version>
-		</dependency>
+
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
@@ -189,12 +181,12 @@
 			<groupId>org.apache.poi</groupId>
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.2.5</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.apache.commons</groupId>
-					<artifactId>commons-compress</artifactId>
-				</exclusion>
-			</exclusions>
+			<!--			<exclusions>-->
+			<!--				<exclusion>-->
+			<!--					<groupId>org.apache.commons</groupId>-->
+			<!--					<artifactId>commons-compress</artifactId>-->
+			<!--				</exclusion>-->
+			<!--			</exclusions>-->
 		</dependency>
 		<!--
 		https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis -->
@@ -234,29 +226,31 @@
 			<artifactId>spring-web</artifactId>
 			<version>6.1.6</version>
 		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-joda</artifactId>
+			<version>2.17.0</version>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.17.0-rc1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+			<version>2.17.0-rc1</version>
+		</dependency>
 	</dependencies>
 
 
 	<build>
 		<finalName>ecdapi-v3.0.0</finalName>
 		<plugins>
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>9.0.8</version>
-				<configuration>
-					<format>HTML</format>
-					<nvdApiServerId>nvd</nvdApiServerId>
-					<nvdApiKey>79597933-f3cc-4601-949b-12513434ade3</nvdApiKey>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>

@@ -54,9 +54,9 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class CallClosureImpl {
-	
+
 	Logger logger = LoggerFactory.getLogger(this.getClass().getName());
-	
+
 	@Autowired
 	private BencallRepo bencallRepo;
 
@@ -134,8 +134,11 @@ public class CallClosureImpl {
 			if (callObj != null) {
 
 				callConfigurationDetails = callConfigurationRepo.getCallConfiguration(request.getPsmId());
-				//if()
-				CallConfiguration callConfigurationDetail = callConfigurationDetails.get(0);
+				CallConfiguration callConfigurationDetail = null;
+				if (callConfigurationDetails != null) {
+					// if()
+					callConfigurationDetail = callConfigurationDetails.get(0);
+				}
 
 				if (obj.getIsCallAnswered() != null && obj.getIsCallAnswered()) {
 					callObj.setCallStatus("Completed");

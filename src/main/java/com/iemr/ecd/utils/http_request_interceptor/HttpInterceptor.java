@@ -85,12 +85,8 @@ public class HttpInterceptor implements HandlerInterceptor {
 					if (authorization == null)
 						throw new Exception(
 								"Authorization key is NULL, please pass valid session key to proceed further. ");
-					/*
-					 * String userRespFromRedis = redisStorage.getSessionObject(authorization); if
-					 * (userRespFromRedis == null) throw new
-					 * Exception("invalid Authorization key, please pass a valid key to proceed further. "
-					 * ); break;
-					 */
+					break;
+					
 				}
 			} catch (Exception e) {
 				logger.error(e.getLocalizedMessage());
