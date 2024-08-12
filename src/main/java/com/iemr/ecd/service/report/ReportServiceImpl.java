@@ -41,7 +41,9 @@ import com.iemr.ecd.utils.mapper.InputMapper;
 
 @Service
 public class ReportServiceImpl implements ReportService {
-
+	private String periodOfOccurence = "Period of occurence";
+	private String reasonOfIncident = "Reason of incident";
+	
 	@Autowired
 	private EcdReportRepo ecdReportRepo;
 
@@ -533,7 +535,7 @@ public class ReportServiceImpl implements ReportService {
 	public ByteArrayInputStream getAbortionReport(String request, String filename) throws Exception {
 
 		String[] headers = { "SNO", "Call Date", "RCH ID", "Phone No", "Beneficiary Name", 
-				"District Name", "Block Name", "LMP", "EDD", "Reason of incident", "Period of occurence" };
+				"District Name", "Block Name", "LMP", "EDD", reasonOfIncident, periodOfOccurence };
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -731,7 +733,7 @@ public class ReportServiceImpl implements ReportService {
 	public ByteArrayInputStream getStillBirthReport(String request, String filename) throws Exception {
 
 		String[] headers = { "SNO", "CALL Date", "Registration No", "PhoneNo of Beneficiary", "MotherName", 
-				"District", "Block", "LMP", "EDD", "Reason of incident", "Period of occurence" };
+				"District", "Block", "LMP", "EDD", reasonOfIncident, periodOfOccurence };
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -771,7 +773,7 @@ public class ReportServiceImpl implements ReportService {
 	public ByteArrayInputStream getBabyDeathReport(String request, String filename) throws Exception {
 
 		String[] headers = { "SNO", "CALL Date", "Registration No", "PhoneNo of Beneficiary", "MotherName", 
-				"District", "Block", "LMP", "EDD", "Reason of incident", "Period of occurence" };
+				"District", "Block", "LMP", "EDD", reasonOfIncident, periodOfOccurence };
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -892,7 +894,7 @@ public class ReportServiceImpl implements ReportService {
 	public ByteArrayInputStream getMiscarriageReport(String request, String filename) throws Exception {
 
 		String[] headers = { "SNO", "Call Date", "RCH ID", "Phone No", "Beneficiary Name", 
-				"District Name", "Block Name", "LMP", "EDD", "Causes of Miscarriage", "Period of occurrence"};
+				"District Name", "Block Name", "LMP", "EDD", "Causes of Miscarriage", periodOfOccurence};
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
