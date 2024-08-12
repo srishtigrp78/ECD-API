@@ -50,6 +50,9 @@ public class ReportServiceImpl implements ReportService {
 	private static final String HUSBAND_NAME = "Husband Name";
 	private static final String EDD_DOB = "EDD/DOB";
 	private static final String RCH_ID = "RCH Id";
+	private static final String BENEFICIARY_NAME = "Beneficiary Name";
+	private static final String BLOCK = "Block";
+	private static final String PHONE_NO = "Phone No";
 	
 	
 	@Autowired
@@ -58,7 +61,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getCallDetailsReport(String request, String filename) throws Exception {
 		String[] headers = { "SNO", "User ID", "Call Time", "District Name", "Health Block Name", "PHC Name",
-				"Sub Centre Name", "Village Name", "Address", "Phone Number", "Mobile Of", "Alternative No",
+				"Sub Centre Name", "Village Name", "Address", PHONE_NO, "Mobile Of", "Alternative No",
 				HUSBAND_NAME, MOTHER_NAME, "LMP", EDD_DOB, REGISTRATION_NO, "Call Category", "Call Status",
 				"Is Verified(Yes/No)", "Is HRP", "HRP Indicators", "Call Duration", "Remarks", "Call Answered",
 				"Is Call Disconnected", "Is Wrong Number" };
@@ -184,7 +187,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getBeneficiarywisefollowupdetails(String request, String filename) throws Exception {
-		String[] headers = { "SNO", "RCH NO", "Phone No", "Beneficiary Name", "District", "Block", "LMP", EDD_DOB,
+		String[] headers = { "SNO", "RCH NO", PHONE_NO, BENEFICIARY_NAME, "District", BLOCK, "LMP", EDD_DOB,
 				"ECD-1", "ECD-2", "ECD-3", "ECD-4", "ECD-5", "ECD-6", "ECD-7", "ECD-8", "ECD-9", "ECD-10", "ECD-11",
 				"ECD-12", "ECD-13", "ECD-14", "ECD-15", "ECD-16",
 				"Total number of services received by Beneficiaries" };
@@ -226,7 +229,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getCallDetailReportUnique(String request, String filename) throws Exception {
 		String[] headers = { "Sno", "User ID", "Call Time", "Mother District", "Health Block Name", "PHC Name",
-				"Sub Center Name", "Village Name", "Address", "Phone Number", "Phone No Of Whom", "Alternative No",
+				"Sub Center Name", "Village Name", "Address", PHONE_NO, "Phone No Of Whom", "Alternative No",
 				HUSBAND_NAME, MOTHER_NAME, "LMP Date", EDD_DOB, "RegistrationNO", "CallCategory", "Callstatus",
 				"IsVerified", "Is HRP", "HRP indicators", "CallDuration", "Remarks", "Total", "Call Answered",
 				"Is Call Disconnected", "Is Wrong Number" };
@@ -268,7 +271,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getBirthDefectReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "Date Of Birth(Child)", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -307,7 +310,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getAashaHomeVisitGapReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "EDD", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -346,7 +349,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getCalciumIFATabNonadherenceReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "EDD", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -385,7 +388,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getAbsenceInVHSNDReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "EDD", "Reason Of Not Attain" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -424,7 +427,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getVaccineDropOutIdentifiedReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", MOTHER_NAME, "District Name", "Block Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, MOTHER_NAME, "District Name", "Block Name",
 				"LMP", "DOB(Child)", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -463,7 +466,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getVaccineLeftOutIdentifiedReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "DOB(Child)", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -502,7 +505,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getDevelopmentalDelayReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "Date of birth (Child)", "Developmental delay(Findings)" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -542,7 +545,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getAbortionReport(String request, String filename) throws Exception {
 
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", 
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, 
 				"District Name", "Block Name", "LMP", "EDD", REASON_OF_INCIDENT, PERIOD_OF_OCCURENCE };
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
@@ -582,7 +585,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getDeliveryStatusReport(String request, String filename) throws Exception {
 
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name", 
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name", 
 				"Block Name", "LMP", "EDD", "Place of Delivery", "Mode of Delivery" };
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
@@ -622,7 +625,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getHRPCasesIdentifiedReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, "Agetname", RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, "Agetname", RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "EDD", "ReasonsforHRP" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -661,7 +664,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getInfantsHighRiskReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, "Agetname", RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, "Agetname", RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "EDD", "ReasonsforHrni" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -701,7 +704,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getMaternalDeathReport(String request, String filename) throws Exception {
 		String[] headers = { "SNO", CALL_DATE, REGISTRATION_NO, PHONENO_OF_BENEFICIARY, MOTHER_NAME, "District",
-				"Block", "LMP", "EDD", "Remarks" };
+				BLOCK, "LMP", "EDD", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
 		List<Object[]> result = null;
@@ -741,7 +744,7 @@ public class ReportServiceImpl implements ReportService {
 	public ByteArrayInputStream getStillBirthReport(String request, String filename) throws Exception {
 
 		String[] headers = { "SNO", CALL_DATE, REGISTRATION_NO, PHONENO_OF_BENEFICIARY, MOTHER_NAME, 
-				"District", "Block", "LMP", "EDD", REASON_OF_INCIDENT, PERIOD_OF_OCCURENCE };
+				"District", BLOCK, "LMP", "EDD", REASON_OF_INCIDENT, PERIOD_OF_OCCURENCE };
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -781,7 +784,7 @@ public class ReportServiceImpl implements ReportService {
 	public ByteArrayInputStream getBabyDeathReport(String request, String filename) throws Exception {
 
 		String[] headers = { "SNO", CALL_DATE, REGISTRATION_NO, PHONENO_OF_BENEFICIARY, MOTHER_NAME, 
-				"District", "Block", "LMP", "EDD", REASON_OF_INCIDENT, PERIOD_OF_OCCURENCE };
+				"District", BLOCK, "LMP", "EDD", REASON_OF_INCIDENT, PERIOD_OF_OCCURENCE };
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -820,8 +823,8 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getNotConnectedPhonelistDiffformatReport(String request, String filename)
 			throws Exception {
-		String[] headers = { "SNO", "Call Time", "Beneficiary Name", HUSBAND_NAME, RCH_ID, "District", "Block Name",
-				"Phone Number", "Call Status", "ANM Name", "ANM PhoneNo", "ASHA Name", "ASHA PhoneNo" };
+		String[] headers = { "SNO", "Call Time", BENEFICIARY_NAME, HUSBAND_NAME, RCH_ID, "District", "Block Name",
+				PHONE_NO, "Call Status", "ANM Name", "ANM PhoneNo", "ASHA Name", "ASHA PhoneNo" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
 		List<Object[]> result = null;
@@ -861,7 +864,7 @@ public class ReportServiceImpl implements ReportService {
 
 	@Override
 	public ByteArrayInputStream getJSYRelatedComplaintsReport(String request, String filename) throws Exception {
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", "District Name",
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, "District Name",
 				"Block Name", "LMP", "EDD", "Remarks" };
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
 		ByteArrayInputStream response = null;
@@ -901,7 +904,7 @@ public class ReportServiceImpl implements ReportService {
 	@Override
 	public ByteArrayInputStream getMiscarriageReport(String request, String filename) throws Exception {
 
-		String[] headers = { "SNO", CALL_DATE, RCH_ID, "Phone No", "Beneficiary Name", 
+		String[] headers = { "SNO", CALL_DATE, RCH_ID, PHONE_NO, BENEFICIARY_NAME, 
 				"District Name", "Block Name", "LMP", "EDD", "Causes of Miscarriage", PERIOD_OF_OCCURENCE};
 
 		String[] criteriaColumns = { "Start_Date", "End_Date", "Role", "Agent_ID" };
