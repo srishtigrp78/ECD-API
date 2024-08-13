@@ -45,12 +45,14 @@ public class LoggingAdvice {
 
 		Object[] objArr = pjp.getArgs();
 
-		logger.info("request : " + mapper.writeValueAsString(objArr) + " className : " + className + " methodName :"
-				+ methodName);
+		/*
+		 * logger.info("request : " + mapper.writeValueAsString(objArr) +
+		 * " className : " + className + " methodName :" + methodName);
+		 */
 
 		Object object = pjp.proceed();
 
-		logger.info("response" + mapper.writeValueAsString(object));
+		//logger.info("response" + mapper.writeValueAsString(object));
 
 		return object;
 	}
